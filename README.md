@@ -62,7 +62,7 @@ Copy `{"absolute_path_to_foundry_data":"INSERT_PATH_HERE"}` into fvttmv.conf
 Replace `INSERT_PATH_HERE` with the path to the Data folder inside your foundrydata
 (Not the foundrydata folder itself!).
 
-IMPORTANT: Escape all \ with \\ in that path.
+IMPORTANT: Escape all \\ with \\\\ in that path.
 
 It should look something like this:
 
@@ -158,9 +158,9 @@ Known Issues and Quirks
 When one of the paths in the arguments has quotes around it, it can cause issues. This is a problem with how python
 handles arguments and probably can't be fixed. For example on
 Windows `fvttmv.exe '\folder name with spaces\' .\some\other\path`
-will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed (notice the missing \ at the end of
+will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed (notice the missing \\ at the end of
 the first path right before ').
 
 Trailing / and \ are ignored. So `fvttmv some_file some_non_existing_path/` will be treated the same
-as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing / and \ as they only cause issues.
-Especially \.
+as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing / and \\ as they only cause issues.
+Especially \\.
