@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+import json
+import os
+import shutil
+import zipapp
+from os import path
+
+from fvttmv import program_config
+from main import app_name, path_to_config_file_linux
+
+path_to_executable_file = "/usr/bin/{0}".format(app_name)
+
+
+def prepare_archive():
+    if path.exists("temp"):
+        print("temp folder already exists. Please delete it execute the installation somewhere else.")
+
+    os.mkdir("temp")
+
+    shutil.copy("main.py",
+                "temp/")
+
+    shutil.copytree("fvttmv",
+                    "temp/fvttmv")
+
+    zipapp.create_archive("temp",
+                          "{0}.pyz".format(app_name),
+                          main="main:main",
+                          interpreter="python3")
+
+    shutil.rmtree("temp")
+
+
+def create_executable_file():
+    prepare_archive()
+
+    with open(path_to_executable_file,
+              "wb") as appf:
+        appf.write(bytes("#!/usr/bin/env python3\n", "utf-8"))
+
+        with open("{0}.pyz".format(app_name),
+                  'rb') as zipf:
+            shutil.copyfileobj(zipf, appf)
+
+    os.remove("{0}.pyz".format(app_name))
+
+
+def install():
+    print("Installing {0}".format(app_name))
+
+    path_to_foundry_data = input("Enter path to the 'Data' folder of your foundry data (for example "
+                                 "/home/user/foundrydata/Data): ")
+
+    if not path_to_foundry_data.endswith("Data"):
+
+        should_continue_str = input("The entered path does end with Data. Make sure you entered the right one. "
+                                    "Do you want to continue (y,n): ")
+
+        if not should_continue_str.lower() == "y":
+            print("Cancelling installation...")
+            exit()
+
+    if not path.exists(path_to_foundry_data):
+
+        should_continue_str = input("The entered path does not exist. "
+                                    "Do you want to continue (y,n): ")
+
+        if not should_continue_str.lower() == "y":
+            print("Cancelling installation...")
+            exit()
+
+    config_dict = \
+        {
+            program_config.absolute_path_to_foundry_data_key:
+                path.abspath(path_to_foundry_data)
+        }
+
+    path_to_config_file = path_to_config_file_linux
+
+    try:
+
+        with open(path_to_config_file, "w+", encoding="utf-8") as config_fout:
+            json.dump(config_dict, config_fout)
+            print("Created config file /etc/fvttmv.conf")
+    except BaseException as error:
+        print(error)
+        print("Unable to write config file to /etc/fvttmv.conf. Cancelling installation...")
+        exit()
+
+    try:
+
+        create_executable_file()
+
+    except BaseException as error:
+        print(error)
+        print("Unable to copy {0} to /usr/bin/. "
+              "Try running installer with sudo. "
+              "Cancelling installation...".format(app_name))
+        os.remove(path_to_config_file)
+        exit()
+
+    try:
+        os.chmod(path_to_executable_file, 0o555)
+    except BaseException as error:
+        print(error)
+        print("Unable to make /usr/bin/fvttmv executable. "
+              "Try running installer with sudo. "
+              "Cancelling installation...")
+        os.remove(path_to_config_file)
+        os.remove(path_to_executable_file)
+        exit()
+
+    print("Successfully installed {0}".format(app_name))
+
+
+if __name__ == "__main__":
+    install()
