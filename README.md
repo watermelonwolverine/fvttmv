@@ -155,8 +155,12 @@ Looking for references to one or more files:
 Known Issues and Quirks
 =======================
 
+Filesystems are quirky subsequently and so is this program. If you're unsure if something will work or break something make a backup.
+
 Windows
 -------
+
+The program only works in powershell not in cmd.
 
 The Windows file system isn't case-sensitive while the linux filesystem is. What this means that Windows
 treats `C:\SomeFolder\SomeFile` the same as `c:\somefolder\somefile`. When you want to rename a folder or a file and
@@ -169,6 +173,9 @@ handles arguments and probably can't be fixed. For example on
 Windows `fvttmv.exe '\folder name with spaces\' .\some\other\path`
 will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed (notice the missing \\ at the end
 of the first path right before ').
+
+All systems
+-----------
 
 Trailing / and \ are ignored. So `fvttmv some_file some_non_existing_path/` will be treated the same
 as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing / and \\ as they only cause issues.

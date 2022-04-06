@@ -14,7 +14,7 @@ from fvttmv.run_config import RunConfig
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 
-version = "0.1.0"
+version = "0.2.0"
 
 app_name = "fvttmv"
 config_file_name = "{0}.conf".format(app_name)
@@ -42,6 +42,7 @@ def get_path_to_config_file():
         dir_of_script: str
         if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
             # running in a PyInstaller bundle
+            # TODO fix: this doesn't work in cmd only in powershell
             dir_of_script = os.path.dirname(sys.argv[0])
         else:
             # running in normal python environment
@@ -53,6 +54,8 @@ def get_path_to_config_file():
 
 def read_config_file() -> ProgramConfig:
     path_to_config_file = get_path_to_config_file()
+
+    logging.debug("Reading config from: %s", path_to_config_file)
 
     if not os.path.exists(path_to_config_file):
         raise FvttmvException("Missing config file. Could not find {0}".format(path_to_config_file))
@@ -145,19 +148,11 @@ def add_logging_stream_handler(level: int):
     root.addHandler(handler)
 
 
-def process_and_remove_option_args(
-        config: RunConfig,
+def process_and_remove_config_neutral_args(
         args: List[str]) -> None:
     """
-    Processes all args which are options
+    Processes all args which don't affect the run config
     """
-
-    check_option_args(args)
-
-    if version_option in args:
-        print("{0} version: {1}".format(app_name, version))
-        sys.exit(0)
-
     if verbose_debug_option in args:
         add_logging_stream_handler(logging.DEBUG)
         logging.debug("Got arguments %s",
@@ -172,6 +167,20 @@ def process_and_remove_option_args(
         logging.disable(logging.CRITICAL)
         logging.disable(logging.ERROR)
 
+    if version_option in args:
+        print("{0} version: {1}".format(app_name, version))
+        sys.exit(0)
+
+    # remove program name
+    args.pop(0)
+
+
+def process_and_remove_config_args(
+        config: RunConfig,
+        args: List[str]) -> None:
+    """
+    Processes all args which affect the run config
+    """
     if no_move_option in args:
         config.no_move = True
         args.remove(no_move_option)
@@ -188,11 +197,15 @@ def do_run() -> None:
     src_list: list
     dst: str
 
+    args = sys.argv[:]
+
+    check_option_args(args)
+
+    process_and_remove_config_neutral_args(args)
+
     config = RunConfig(read_config_file())
 
-    args = sys.argv[1:]  # don't copy application name
-
-    process_and_remove_option_args(config,
+    process_and_remove_config_args(config,
                                    args)
 
     if config.check_only:
@@ -224,6 +237,8 @@ def main() -> None:
     except FvttmvException as exception:
         logging.error(exception)
         print(str(exception))
+    except SystemExit:
+        pass
     except BaseException as unexpected_exception:
         logging.error(unexpected_exception)
         print("An unexpected error occurred: " + str(unexpected_exception))
