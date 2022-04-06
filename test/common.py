@@ -3,7 +3,9 @@ import shutil
 
 
 def ref(*args):
-    return "/".join(args)
+    result = "/".join(args)
+    result = result.replace(" ", "%20")
+    return result
 
 
 class C:
@@ -12,7 +14,7 @@ class C:
     """
 
     foundrydata = "foundrydata"
-    assets = "assets"
+    assets = "assets (with space)"
     worlds = "worlds"
     Data = "Data"
     Logs = "Logs"
@@ -22,7 +24,7 @@ class C:
     scenes = "scenes"
     data = "data"
     file1_png = "file1.png"
-    file2_png = "file2.png"
+    file2_png = "file2 (with space).png"
     file3_png = "file3.png"
     images = "images"
     images2 = "images2"

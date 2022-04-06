@@ -28,9 +28,7 @@ class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):
 
     def process_file(self,
                      abs_path_to_file: str) -> None:
-        relative_path_to_file = self._path_tools.make_path_relative_to_foundry_data(abs_path_to_file)
-
-        relative_path_to_file_unix_style = relative_path_to_file.replace("\\", "/")
+        relative_path_to_file_unix_style = self._path_tools.create_reference_from_absolute_path(abs_path_to_file)
 
         abs_paths_to_db_files = ReferencesSearcherDbFiles.search_for_references_in_db_files(
             self._path_tools.abs_path_to_foundry_data,

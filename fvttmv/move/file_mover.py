@@ -131,9 +131,9 @@ class FileMover:
                                  abs_path_to_src_file: str,
                                  abs_path_to_dst_file: str) -> None:
 
-        old_reference = self.path_tools.make_path_relative_to_foundry_data_unix_style(abs_path_to_src_file)
+        old_reference = self.path_tools.create_reference_from_absolute_path(abs_path_to_src_file)
 
-        new_reference = self.path_tools.make_path_relative_to_foundry_data_unix_style(abs_path_to_dst_file)
+        new_reference = self.path_tools.create_reference_from_absolute_path(abs_path_to_dst_file)
 
         self.references_updater.replace_references(
             old_reference,

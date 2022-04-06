@@ -1,6 +1,7 @@
 import os.path
 
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
+from fvttmv.reference_tools import ReferenceTools
 
 
 class PathTools:
@@ -16,12 +17,12 @@ class PathTools:
 
         self.abs_path_to_foundry_data = absolute_path_to_foundry_data
 
-    def make_path_relative_to_foundry_data_unix_style(self,
-                                                      absolute_path: str) -> str:
+    def create_reference_from_absolute_path(self,
+                                            absolute_path: str) -> str:
 
         rel_path = self.make_path_relative_to_foundry_data(absolute_path)
 
-        result = rel_path.replace("\\", "/")
+        result = ReferenceTools.create_reference_from_relative_path(rel_path)
 
         return result
 
