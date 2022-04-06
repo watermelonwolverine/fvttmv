@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import List
 
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
@@ -19,6 +20,9 @@ class PreMoveChecker:
 
     def __init__(self,
                  path_tools: PathTools):
+
+        if sys.platform not in ["win32", "linux"]:
+            raise FvttmvException("Unsupported platform")
 
         self.path_tools = path_tools
 

@@ -96,7 +96,7 @@ class DirectoryMover:
         if not self.config.no_move:
             self._assert_parent_dir_exists(abs_path_to_dst_dir)
 
-        if abs_path_to_src_dir == abs_path_to_dst_dir:
+        if PathTools.paths_are_the_same(abs_path_to_src_dir, abs_path_to_dst_dir):
             raise FvttmvException("Cannot move {0} onto itself'"
                                   .format(abs_path_to_src_dir))
 

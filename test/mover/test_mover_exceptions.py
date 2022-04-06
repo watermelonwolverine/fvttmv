@@ -1,4 +1,5 @@
 import os
+import sys
 
 from fvttmv.exceptions import FvttmvException
 from test.common import AbsPaths, C
@@ -221,6 +222,27 @@ class MoverTestExceptions(MoverTestBase):
 
         try:
             self.mover.move([AbsPaths.file1_png], target_path)
+            self.fail()
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
+            pass
+
+    def test_rename_folder_case_sensitive_windows(self):
+
+        if sys.platform != "win32":
+            print("SKIPPED test_rename_folder_case_sensitive_windows")
+            return
+
+        print("test_rename_folder_case_sensitive_windows")
+
+        source_path = os.path.join(AbsPaths.images, "some_folder")
+
+        target_path = os.path.join(AbsPaths.images, "Some_Folder")
+
+        os.mkdir(source_path)
+
+        try:
+            self.mover.move([source_path], target_path)
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))

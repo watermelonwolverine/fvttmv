@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.reference_tools import ReferenceTools
@@ -44,7 +45,7 @@ class PathTools:
 
         self.assert_path_format_is_ok(absolute_path)
 
-        if absolute_path == self.abs_path_to_foundry_data:
+        if PathTools.paths_are_the_same(absolute_path, self.abs_path_to_foundry_data):
             return False
 
         return self.is_parent_dir(self.abs_path_to_foundry_data,
@@ -59,7 +60,7 @@ class PathTools:
         common_path = os.path.commonpath([absolute_parent_path,
                                           absolute_path])
 
-        return common_path == absolute_parent_path
+        return PathTools.paths_are_the_same(common_path, absolute_parent_path)
 
     @staticmethod
     def is_normalized_path(path: str) -> bool:
@@ -94,3 +95,24 @@ class PathTools:
                 or PathTools.ends_with_separator(path) \
                 or PathTools.contains_illegal_characters(path):
             raise FvttmvInternalException("{0} is not ok".format(path))
+
+    @staticmethod
+    def filesystem_is_case_sensitive():
+        if sys.platform == "win32":
+            return True
+        if sys.platform == "linux":
+            return False
+        else:
+            raise FvttmvInternalException("Unsupported Platform")
+
+    @staticmethod
+    def maybe_lower_case_path(path: str):
+        if PathTools.filesystem_is_case_sensitive():
+            return path.lower()
+        else:
+            return path
+
+    @staticmethod
+    def paths_are_the_same(path1: str,
+                           path2: str):
+        return PathTools.maybe_lower_case_path(path1) == PathTools.maybe_lower_case_path(path2)

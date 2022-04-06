@@ -155,11 +155,20 @@ Looking for references to one or more files:
 Known Issues and Quirks
 =======================
 
+Windows
+-------
+
+The Windows file system isn't case-sensitive while the linux filesystem is. What this means that Windows
+treats `C:\SomeFolder\SomeFile` the same as `c:\somefolder\somefile`. When you want to rename a folder or a file and
+only change the case of one or more characters Windows will tell you that the folder already exists or will ask you if
+you want to override the file. To circumvent this issue rename the folder twice and use a different temporary name in
+between.
+
 When one of the paths in the arguments has quotes around it, it can cause issues. This is a problem with how python
 handles arguments and probably can't be fixed. For example on
 Windows `fvttmv.exe '\folder name with spaces\' .\some\other\path`
-will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed (notice the missing \\ at the end of
-the first path right before ').
+will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed (notice the missing \\ at the end
+of the first path right before ').
 
 Trailing / and \ are ignored. So `fvttmv some_file some_non_existing_path/` will be treated the same
 as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing / and \\ as they only cause issues.

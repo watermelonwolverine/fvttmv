@@ -85,7 +85,7 @@ class FileMover:
             return
 
         # don't move file onto itself
-        if abs_path_to_dst_file == abs_path_to_src_file:
+        if PathTools.paths_are_the_same(abs_path_to_dst_file, abs_path_to_src_file):
             raise FvttmvException("Cannot move {0} onto itself".format(abs_path_to_src_file))
 
         # can't override a folder with a file

@@ -1,10 +1,11 @@
 import os
 import shutil
+import urllib.parse
 
 
 def ref(*args):
     result = "/".join(args)
-    result = result.replace(" ", "%20")
+    result = urllib.parse.quote(result)
     return result
 
 

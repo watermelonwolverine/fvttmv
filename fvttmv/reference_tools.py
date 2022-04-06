@@ -1,3 +1,5 @@
+import urllib.parse
+
 from fvttmv.exceptions import FvttmvException
 
 
@@ -25,7 +27,7 @@ class ReferenceTools:
     def create_reference_from_relative_path(path: str):
         result = path.replace("\\", "/")
 
-        result = result.replace(" ", "%20")
+        result = urllib.parse.quote(result)
 
         ReferenceTools.assert_reference_is_ok(result)
 
