@@ -1,7 +1,7 @@
 About
 =====
 
-Mimics the functionality of `mv` command while also updating the references to moved files in Foundry VTT.
+Mimics the functionality of the `mv` command while also updating the references to moved files in Foundry VTT.
 
 IMPORTANT: Shut down Foundry VTT before moving any files.
 
@@ -11,9 +11,9 @@ Installation: Windows
 Step 1: Get the exe
 -------------------
 
-### Option 1: Download (not yet supported)
+### Option 1: Download
 
-Download one of the pre-built fvttmv.exe files
+Download one of the pre-built fvttmv.exe files from `Releases`
 
 Goto Step 2: Install program
 
@@ -80,7 +80,6 @@ Remove the path to the installation directory from the PATH system environment v
 Installation: Ubuntu
 ====================
 
-
 Install python3 if not yet installed
 
 `sudo apt install python3`
@@ -126,7 +125,7 @@ Options
 `--no-move`: Doesn't actually move any files, but updates FoundryVTT databases as if it did, useful for repairing broken
 references\
 `--check`: Doesn't move any file, looks for references to those files. Useful when you want to delete files. Doesn't use
-the `dst` argument, instead interpretes all given paths as source paths\
+the `dst` argument, instead interprets all given paths as source paths\
 `--force` Don't ask before overriding files
 
 Examples
@@ -142,41 +141,56 @@ Windows:
 
 Moving multiple files into an existing folder:
 
+Ubuntu:
 `fvttmv path/to/file1 path/to/file2 path/to/folder`
 
-Also supports wildcards on Ubuntu:
+Windows:
+`fvttmv.exe path\to\file1 path\to\file2 path\to\folder`
+
+Supports wildcards on Ubuntu:
 
 `fvttmv some/folder/*.png path/to/other/folder`
 
 Looking for references to one or more files:
 
+Ubuntu:
 `fvttmv --check some/folder/some_file.png some/folder/some_other_file.png`
+
+Windows:
+`fvttmv.exe --check some\folder\some_file.png some\folder\some_other_file.png`
+
+Use single quotes when moving a file with a space:
+
+Ubuntu:
+`fvttmv 'some folder/some file' 'some other folder/some other file'`
+
+Windows:
+`fvttmv.exe 'some folder\some file' 'some other folder\some other file'`
 
 Known Issues and Quirks
 =======================
 
-Filesystems are quirky subsequently and so is this program. If you're unsure if something will work or break something make a backup.
+All systems
+-----------
+
+Filesystems are quirky and subsequently so is this program.
+
+Trailing `/` and `\` are ignored. So `fvttmv some_file some_non_existing_path/` will be treated the same
+as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing `/` and `\` as they only cause
+issues, especially `\`.
 
 Windows
 -------
 
 The program only works in powershell not in cmd.
 
-The Windows file system isn't case-sensitive while the linux filesystem is. What this means that Windows
-treats `C:\SomeFolder\SomeFile` the same as `c:\somefolder\somefile`. When you want to rename a folder or a file and
-only change the case of one or more characters Windows will tell you that the folder already exists or will ask you if
-you want to override the file. To circumvent this issue rename the folder twice and use a different temporary name in
-between.
+The Windows file system isn't case-sensitive. This means that Windows treats `C:\SomeFolder\SomeFile` the same
+as `c:\somefolder\somefile`. When you want to rename a folder/file and only change the case of one or more characters
+the program will tell you that the folder/file already exists. To circumvent this issue rename the folder/file twice and
+use a different name in between.
 
-When one of the paths in the arguments has quotes around it, it can cause issues. This is a problem with how python
+When one of the paths has `\'` at the end, the arguments will get mixed up. This is a problem with how python
 handles arguments and probably can't be fixed. For example on
 Windows `fvttmv.exe '\folder name with spaces\' .\some\other\path`
-will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed (notice the missing \\ at the end
-of the first path right before ').
+will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed.
 
-All systems
------------
-
-Trailing / and \ are ignored. So `fvttmv some_file some_non_existing_path/` will be treated the same
-as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing / and \\ as they only cause issues.
-Especially \\.
