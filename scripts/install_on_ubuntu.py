@@ -17,10 +17,10 @@ def prepare_archive():
 
     os.mkdir("temp")
 
-    shutil.copy("main.py",
+    shutil.copy("src/main.py",
                 "temp/")
 
-    shutil.copytree("fvttmv",
+    shutil.copytree("src/fvttmv",
                     "temp/fvttmv")
 
     zipapp.create_archive("temp",
