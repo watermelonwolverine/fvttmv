@@ -6,7 +6,7 @@ from fvttmv.exceptions import FvttmvException
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.move.reference_update_confirm import ReferenceUpdateConfirm
 from fvttmv.path_tools import PathTools
-from fvttmv.run_config import RunConfig
+from fvttmv.config import RunConfig
 from fvttmv.update.references_updater import ReferencesUpdater
 
 

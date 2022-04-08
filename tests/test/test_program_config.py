@@ -1,6 +1,6 @@
 import unittest
 
-from fvttmv.program_config import *
+from fvttmv.config import absolute_path_to_foundry_data_key, ProgramConfig, ProgramConfigImpl
 from test.common import *
 
 

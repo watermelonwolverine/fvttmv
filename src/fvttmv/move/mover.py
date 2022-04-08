@@ -1,13 +1,13 @@
 import os
 from typing import List
 
+from fvttmv.config import RunConfig, ProgramConfigChecker
 from fvttmv.move.directory_mover import DirectoryMover
 from fvttmv.move.file_mover import FileMover
 from fvttmv.move.mover_pre_checker import PreMoveChecker
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.move.reference_update_confirm import ReferenceUpdateConfirm
 from fvttmv.path_tools import PathTools
-from fvttmv.run_config import RunConfig
 from fvttmv.update.references_updater import ReferencesUpdater
 
 
@@ -25,25 +25,27 @@ class Mover:
     pre_move_checker: PreMoveChecker
 
     def __init__(self,
-                 config: RunConfig,
+                 run_config: RunConfig,
                  references_updater: ReferencesUpdater,
                  override_confirm: OverrideConfirm = OverrideConfirm(),
                  reference_update_confirm: ReferenceUpdateConfirm = ReferenceUpdateConfirm()):
 
-        self.path_tools = PathTools(config.get_absolute_path_to_foundry_data())
+        self.path_tools = PathTools(run_config.get_absolute_path_to_foundry_data())
 
-        self.file_mover = FileMover(config,
+        self.file_mover = FileMover(run_config,
                                     self.path_tools,
                                     references_updater,
                                     override_confirm,
                                     reference_update_confirm)
 
-        self.directory_mover = DirectoryMover(config,
+        self.directory_mover = DirectoryMover(run_config,
                                               self.path_tools,
                                               references_updater,
                                               self.move)
 
         self.pre_move_checker = PreMoveChecker(self.path_tools)
+
+        ProgramConfigChecker.check_config(run_config)
 
     def move(self,
              src_list: List[str],

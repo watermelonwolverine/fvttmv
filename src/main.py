@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 import sys
@@ -7,12 +6,11 @@ from typing import List
 
 import fvttmv
 import help_text
+from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.path_tools import PathTools
-from fvttmv.program_config import ProgramConfig, ProgramConfigImpl
-from fvttmv.run_config import RunConfig
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 
@@ -57,19 +55,9 @@ def get_path_to_config_file():
 def read_config_file() -> ProgramConfig:
     path_to_config_file = get_path_to_config_file()
 
-    logging.debug("Reading config from: %s", path_to_config_file)
+    program_config = ConfigFileReader.read_config_file(path_to_config_file)
 
-    if not os.path.exists(path_to_config_file):
-        raise FvttmvException("Missing config file. Could not find {0}".format(path_to_config_file))
-
-    # noinspection PyBroadException
-    try:
-        with open(path_to_config_file, encoding="utf-8") as config_file:
-            config_dict = json.load(config_file)
-    except BaseException as ex:
-        raise FvttmvException("Exception while reading config file: " + str(ex))
-
-    return ProgramConfigImpl(config_dict)
+    return program_config
 
 
 def perform_move_with(

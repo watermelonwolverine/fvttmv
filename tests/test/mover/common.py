@@ -6,8 +6,7 @@ from typing import List
 from fvttmv.iterators.directory_walker import DirectoryWalkerCallback, DirectoryWalker
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
-from fvttmv.program_config import ProgramConfig, absolute_path_to_foundry_data_key, ProgramConfigImpl
-from fvttmv.run_config import RunConfig
+from fvttmv.config import RunConfig, absolute_path_to_foundry_data_key, ProgramConfig, ProgramConfigImpl
 from fvttmv.update.references_updater import ReferencesUpdater
 from test.common import AbsPaths, C, Setup
 

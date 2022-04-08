@@ -5,6 +5,7 @@ import shutil
 import zipapp
 from os import path
 
+import fvttmv.config
 from fvttmv import program_config
 from main import app_name, path_to_config_file_linux
 
@@ -71,7 +72,7 @@ def install():
 
     config_dict = \
         {
-            program_config.absolute_path_to_foundry_data_key:
+            fvttmv.config.absolute_path_to_foundry_data_key:
                 path.abspath(path_to_foundry_data)
         }
 
