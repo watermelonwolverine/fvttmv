@@ -15,8 +15,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.error_log],
                             os.path.join(AbsPaths.logs, "new_filename.log"))
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -27,8 +27,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.file1_png],
                             os.path.join(AbsPaths.images, "does_not_exist" + os.path.sep))
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -39,8 +39,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.file1_png, AbsPaths.file2_png],
                             AbsPaths.file3_png)
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -52,8 +52,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([os.path.join(AbsPaths.images, "..", C.images, C.file1_png)],
                             AbsPaths.images.join("file3.png"))
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -65,8 +65,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.file1_png],
                             os.path.join(AbsPaths.images, "..", C.images, "new_filename.png"))
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -77,8 +77,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.Data],
                             os.path.join(os.path.abspath(C.foundrydata), "Data2"))
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -90,8 +90,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.file1_png],
                             os.path.join(C.foundrydata, C.Data, C.file1_png))
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -103,8 +103,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([os.path.join(AbsPaths.Data, C.file1_png)],
                             AbsPaths.file1_png)
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -116,8 +116,8 @@ class MoverTestExceptions(MoverTestBase):
             self.mover.move([AbsPaths.assets],
                             AbsPaths.images)
             self.fail()
-        except FvttmvException:
-            pass
+        except FvttmvException as ex:
+            print("Got exception: " + str(ex))
 
         self.assert_nothing_changed()
 
@@ -131,7 +131,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
         self.assert_nothing_changed()
 
@@ -145,7 +144,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
         self.assert_nothing_changed()
 
@@ -159,7 +157,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
         self.assert_nothing_changed()
 
@@ -173,7 +170,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
         self.assert_nothing_changed()
 
@@ -189,7 +185,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
     def test_rename_file_with_quotation_marks1(self):
         print("test_rename_file_with_quotation_marks1")
@@ -201,7 +196,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
     def test_rename_file_with_quotation_marks2(self):
         print("test_rename_file_with_quotation_marks2")
@@ -213,7 +207,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
     def test_rename_file_with_quotation_marks3(self):
         print("test_rename_file_with_quotation_marks3")
@@ -225,7 +218,6 @@ class MoverTestExceptions(MoverTestBase):
             self.fail()
         except FvttmvException as ex:
             print("Got exception: " + str(ex))
-            pass
 
     def test_rename_folder_case_sensitive_windows(self):
 

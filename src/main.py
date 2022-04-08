@@ -5,6 +5,7 @@ import sys
 from os import path
 from typing import List
 
+import help_text
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
@@ -14,7 +15,7 @@ from fvttmv.run_config import RunConfig
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 
-version = "0.2.0"
+version = "0.2.1"
 
 app_name = "fvttmv"
 config_file_name = "{0}.conf".format(app_name)
@@ -25,13 +26,15 @@ verbose_debug_option = "--verbose-debug"
 no_move_option = "--no-move"
 check_option = "--check"
 force_option = "--force"
+help_option = "--help"
 allowed_args = [
     version_option,
     verbose_info_option,
     verbose_debug_option,
     no_move_option,
     check_option,
-    force_option
+    force_option,
+    help_option
 ]
 
 
@@ -118,12 +121,14 @@ def perform_search_with(
     searcher.search(abs_search_list)
 
 
-def check_option_args(args: List[str]) -> None:
+def check_for_unknown_args(args: List[str]) -> None:
     for arg in args:
         if arg.startswith("-"):
             if arg not in allowed_args:
                 raise FvttmvException("Unknown argument: {0}".format(arg))
 
+
+def check_for_illegal_arg_combos(args: List[str]) -> None:
     combination_error_msg = "Combining '{0}' and '{1}' is not allowed"
 
     if check_option in args and no_move_option in args:
@@ -133,6 +138,18 @@ def check_option_args(args: List[str]) -> None:
     if verbose_debug_option in args and verbose_info_option in args:
         msg = combination_error_msg.format(verbose_info_option, verbose_debug_option)
         raise FvttmvException(msg)
+
+
+def check_for_duplicate_args(args: List[str]) -> None:
+    for allowed_arg in allowed_args:
+        if args.count(allowed_arg) > 1:
+            raise FvttmvException("Only one occurrence per option is allowed")
+
+
+def check_args(args: List[str]) -> None:
+    check_for_unknown_args(args)
+    check_for_illegal_arg_combos(args)
+    check_for_duplicate_args(args)
 
 
 def add_logging_stream_handler(level: int):
@@ -148,31 +165,30 @@ def add_logging_stream_handler(level: int):
     root.addHandler(handler)
 
 
-def process_and_remove_config_neutral_args(
+def configure_logging(
         args: List[str]) -> None:
     """
     Processes all args which don't affect the run config
     """
     if verbose_debug_option in args:
         add_logging_stream_handler(logging.DEBUG)
-        logging.debug("Got arguments %s",
-                      args)
         args.remove(verbose_debug_option)
     elif verbose_info_option in args:
         add_logging_stream_handler(logging.INFO)
-        logging.debug("Got arguments %s",
-                      args)
         args.remove(verbose_info_option)
     else:
         logging.disable(logging.CRITICAL)
         logging.disable(logging.ERROR)
 
-    if version_option in args:
-        print("{0} version: {1}".format(app_name, version))
-        sys.exit(0)
 
-    # remove program name
-    args.pop(0)
+def read_bool_arg(arg: str,
+                  args: List[str],
+                  default: bool = False):
+    if arg in args:
+        args.remove(arg)
+        return True
+    else:
+        return default
 
 
 def process_and_remove_config_args(
@@ -181,27 +197,35 @@ def process_and_remove_config_args(
     """
     Processes all args which affect the run config
     """
-    if no_move_option in args:
-        config.no_move = True
-        args.remove(no_move_option)
 
-    if check_option in args:
-        config.check_only = True
-        args.remove(check_option)
-
-    if force_option in args:
-        config.force = True
+    config.no_move = read_bool_arg(no_move_option,
+                                   args)
+    config.check_only = read_bool_arg(check_option,
+                                      args)
+    config.force = read_bool_arg(force_option,
+                                 args)
 
 
 def do_run() -> None:
     src_list: list
     dst: str
 
-    args = sys.argv[:]
+    args = sys.argv[1:]
 
-    check_option_args(args)
+    check_args(args)
 
-    process_and_remove_config_neutral_args(args)
+    configure_logging(args)
+
+    logging.debug("Got arguments %s",
+                  sys.argv)
+
+    if help_option in args:
+        print(help_text.help_text)
+        return
+
+    if version_option in args:
+        print("{0} version: {1}".format(app_name, version))
+        return
 
     config = RunConfig(read_config_file())
 
@@ -210,15 +234,15 @@ def do_run() -> None:
 
     if config.check_only:
         if len(args) < 1:
-            raise Exception("Search argument missing")
+            raise FvttmvException("Search argument missing")
 
         perform_search_with(args,
                             config)
     else:
         if len(args) < 1:
-            raise Exception("Source argument missing")
+            raise FvttmvException("Source argument missing")
         if len(args) < 2:
-            raise Exception("Destination argument missing")
+            raise FvttmvException("Destination argument missing")
 
         source_files = args[0:-1]
         destination = args[-1]  # last arg is destination arg
