@@ -6,3 +6,9 @@
 0.2.0
 =====
 - Fixed issues with spaces and special characters in path names
+
+0.2.1
+=====
+- Many internal changes
+- Project can now be build into a python package and used in other python projects
+- Added --help arg

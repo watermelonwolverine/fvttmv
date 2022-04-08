@@ -19,7 +19,7 @@ help_text = "\
     Syntax\n\
     ------\n\
     \n\
-    `fvttmv [--verbose-info, --verbose-debug, --version, --no-move, --check] src [*srcs] [dst]`\n\
+    `fvttmv [--verbose-info, --verbose-debug, --version, --no-move, --check, --help] src [*srcs] [dst]`\n\
     \n\
     `src`: Source path which should be moved or checked\n\
     `*srcs`: Optional additional source paths\n\
@@ -36,6 +36,7 @@ help_text = "\
     `--check`: Doesn't move any file, looks for references to those files. Useful when you want to delete files. Doesn't use\n\
     the `dst` argument, instead interprets all given paths as source paths\n\
     `--force` Don't ask before overriding files\n\
+    `--help` Display help and exit\n\
     \n\
     Examples\n\
     --------\n\

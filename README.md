@@ -110,7 +110,7 @@ your Foundry VTT data for cases where something goes wrong.
 Syntax
 ------
 
-`fvttmv [--verbose-info, --verbose-debug, --version, --no-move, --check] src [*srcs] [dst]`
+`fvttmv [--verbose-info, --verbose-debug, --version, --no-move, --check, --help] src [*srcs] [dst]`
 
 `src`: Source path which should be moved or checked\
 `*srcs`: Optional additional source paths\
@@ -126,7 +126,8 @@ Options
 references\
 `--check`: Doesn't move any file, looks for references to those files. Useful when you want to delete files. Doesn't use
 the `dst` argument, instead interprets all given paths as source paths\
-`--force` Don't ask before overriding files
+`--force` Don't ask before overriding files\
+`--help` Display help and exit
 
 Examples
 --------
