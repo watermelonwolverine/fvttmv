@@ -2,11 +2,13 @@
 import json
 import os
 import shutil
+import sys
 import zipapp
 from os import path
 
-import fvttmv.config
-from fvttmv import program_config
+sys.path.append("src")
+
+from fvttmv.config import Keys
 from main import app_name, path_to_config_file_linux
 
 path_to_executable_file = "/usr/bin/{0}".format(app_name)
@@ -21,8 +23,11 @@ def prepare_archive():
     shutil.copy("src/main.py",
                 "temp/")
 
-    shutil.copytree("src/fvttmv",
-                    "temp/fvttmv")
+    shutil.copy("src/help_text.py",
+                "temp/")
+
+    shutil.copytree("src/{0}".format(app_name),
+                    "temp/{0}".format(app_name))
 
     zipapp.create_archive("temp",
                           "{0}.pyz".format(app_name),
@@ -72,20 +77,17 @@ def install():
 
     config_dict = \
         {
-            fvttmv.config.absolute_path_to_foundry_data_key:
-                path.abspath(path_to_foundry_data)
+            Keys.absolute_path_to_foundry_data_key: path.abspath(path_to_foundry_data)
         }
-
-    path_to_config_file = path_to_config_file_linux
 
     try:
 
-        with open(path_to_config_file, "w+", encoding="utf-8") as config_fout:
+        with open(path_to_config_file_linux, "w+", encoding="utf-8") as config_fout:
             json.dump(config_dict, config_fout)
-            print("Created config file /etc/fvttmv.conf")
+            print("Created config file {0}".format(path_to_config_file_linux))
     except BaseException as error:
         print(error)
-        print("Unable to write config file to /etc/fvttmv.conf. Cancelling installation...")
+        print("Unable to write config file to {0}. Cancelling installation...".format(path_to_config_file_linux))
         exit()
 
     try:
@@ -97,7 +99,7 @@ def install():
         print("Unable to copy {0} to /usr/bin/. "
               "Try running installer with sudo. "
               "Cancelling installation...".format(app_name))
-        os.remove(path_to_config_file)
+        os.remove(path_to_config_file_linux)
         exit()
 
     try:
@@ -107,7 +109,7 @@ def install():
         print("Unable to make /usr/bin/fvttmv executable. "
               "Try running installer with sudo. "
               "Cancelling installation...")
-        os.remove(path_to_config_file)
+        os.remove(path_to_config_file_linux)
         os.remove(path_to_executable_file)
         exit()
 

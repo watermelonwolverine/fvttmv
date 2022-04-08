@@ -12,3 +12,7 @@
 - Many internal changes
 - Project can now be build into a python package and used in other python projects
 - Added --help arg
+
+0.2.2
+=====
+- Fixed ubuntu install script
