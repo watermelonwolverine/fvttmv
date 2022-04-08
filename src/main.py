@@ -5,6 +5,7 @@ import sys
 from os import path
 from typing import List
 
+import fvttmv
 import help_text
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
@@ -14,8 +15,6 @@ from fvttmv.program_config import ProgramConfig, ProgramConfigImpl
 from fvttmv.run_config import RunConfig
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
-
-version = "0.2.1"
 
 app_name = "fvttmv"
 config_file_name = "{0}.conf".format(app_name)
@@ -224,7 +223,7 @@ def do_run() -> None:
         return
 
     if version_option in args:
-        print("{0} version: {1}".format(app_name, version))
+        print("{0} version: {1}".format(app_name, fvttmv.__version__))
         return
 
     config = RunConfig(read_config_file())
@@ -244,11 +243,11 @@ def do_run() -> None:
         if len(args) < 2:
             raise FvttmvException("Destination argument missing")
 
-        source_files = args[0:-1]
-        destination = args[-1]  # last arg is destination arg
+        source_paths = args[0:-1]
+        destination_path = args[-1]  # last arg is destination arg
 
-        perform_move_with(source_files,
-                          destination,
+        perform_move_with(source_paths,
+                          destination_path,
                           config)
 
 
