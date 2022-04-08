@@ -1,10 +1,9 @@
 import os
-
 from os import path
 from typing import List
 
+from fvttmv.__checks import check_path_to_foundry_data
 from fvttmv.exceptions import FvttmvException
-from fvttmv.path_tools import PathTools
 
 
 class WorldsFinder:
@@ -14,17 +13,15 @@ class WorldsFinder:
     """
 
     # given
-    _absolute_path_to_foundry_data: str
+    __abs_path_to_foundry_data: str
 
     def __init__(self,
-                 absolute_path_to_foundry_data: str):
+                 abs_path_to_foundry_data: str):
 
-        if not path.isabs(absolute_path_to_foundry_data) \
-                or not path.isdir(absolute_path_to_foundry_data) \
-                or not PathTools.is_normalized_path(absolute_path_to_foundry_data):
+        if not check_path_to_foundry_data(abs_path_to_foundry_data):
             raise FvttmvException()
 
-        self._absolute_path_to_foundry_data = absolute_path_to_foundry_data
+        self.__abs_path_to_foundry_data = abs_path_to_foundry_data
 
     def get_paths_to_worlds(self) -> List[str]:
         """
@@ -32,7 +29,7 @@ class WorldsFinder:
         and have the right version
         """
 
-        path_to_worlds_directory = path.join(self._absolute_path_to_foundry_data,
+        path_to_worlds_directory = path.join(self.__abs_path_to_foundry_data,
                                              "worlds")
 
         worlds_directory_content = os.listdir(path_to_worlds_directory)
@@ -44,13 +41,13 @@ class WorldsFinder:
             path_to_world = os.path.join(path_to_worlds_directory,
                                          file_or_folder_name)
 
-            if self.is_path_a_world_dir(path_to_world):
+            if self._is_path_a_world_dir(path_to_world):
                 result.append(path_to_world)
 
         return result
 
     @staticmethod
-    def is_path_a_world_dir(target_path: str) -> bool:
+    def _is_path_a_world_dir(target_path: str) -> bool:
 
         # has to be a directory
         if not path.isdir(target_path):

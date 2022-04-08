@@ -2,7 +2,7 @@ import unittest
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.reference_tools import ReferenceTools
-from fvttmv.search.references_searcher_string import ReferencesSearcherString
+from fvttmv.search.__references_searcher_string import ReferencesSearcherString
 
 
 class ReferencesSearcherStringTest(unittest.TestCase):

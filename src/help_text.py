@@ -1,5 +1,5 @@
-help_text = \
-    "About\n\
+help_text = "\
+    About\n\
     =====\n\
     \n\
     Mimics the functionality of the `mv` command while also updating the references to moved files in Foundry VTT.\n\

@@ -1,10 +1,9 @@
 import unittest
-
-from fvttmv.exceptions import FvttmvException
-from test.common import *
 from typing import List
 
+from fvttmv.exceptions import FvttmvException
 from fvttmv.iterators.directory_walker import DirectoryWalker, DirectoryWalkerCallback
+from test.common import *
 
 
 class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):

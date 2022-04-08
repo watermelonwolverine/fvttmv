@@ -53,11 +53,11 @@ class WorldsFinderTest(unittest.TestCase):
 
         print("test_is_path_a_world_dir")
 
-        result = self.worlds_finder.is_path_a_world_dir(AbsPaths.world1)
+        result = WorldsFinder._is_path_a_world_dir(AbsPaths.world1)
 
         self.assertTrue(result)
 
-        result = self.worlds_finder.is_path_a_world_dir(AbsPaths.not_a_world1)
+        result = WorldsFinder._is_path_a_world_dir(AbsPaths.not_a_world1)
 
         self.assertFalse(result)
 

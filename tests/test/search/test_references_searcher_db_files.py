@@ -1,6 +1,6 @@
 import unittest
 
-from fvttmv.search.references_searcher_db_files import ReferencesSearcherDbFiles
+from fvttmv.search.__references_searcher_db_files import ReferencesSearcherDbFiles
 from test.common import *
 
 

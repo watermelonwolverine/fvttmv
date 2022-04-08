@@ -1,6 +1,7 @@
 from typing import List
+
 from fvttmv.iterators.db_files_iterator import DbFilesIterator
-from fvttmv.search.references_searcher_file import ReferencesSearcherFile
+from fvttmv.search.__references_searcher_file import ReferencesSearcherFile
 
 
 class ReferencesSearcherDbFiles:

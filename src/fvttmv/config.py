@@ -2,8 +2,8 @@ import json
 import logging
 import os.path
 
+from fvttmv.__checks import check_path_to_foundry_data
 from fvttmv.exceptions import FvttmvException
-from fvttmv.path_tools import PathTools
 
 
 class Keys:
@@ -22,6 +22,9 @@ class ProgramConfigImpl(ProgramConfig):
 
     def __init__(self,
                  abs_path_to_foundry_data: str):
+        if not check_path_to_foundry_data(abs_path_to_foundry_data):
+            raise FvttmvException("Absolute path to foundry data is not configures correctly.")
+
         self.__abs_path_to_foundry_data = abs_path_to_foundry_data
 
     def get_absolute_path_to_foundry_data(self) -> str:
@@ -91,10 +94,5 @@ class ProgramConfigChecker:
     def check_config(program_config: ProgramConfig):
         abs_path_to_foundry_data = program_config.get_absolute_path_to_foundry_data()
 
-        if abs_path_to_foundry_data == "" \
-                or not os.path.isabs(abs_path_to_foundry_data) \
-                or not PathTools.is_normalized_path(abs_path_to_foundry_data) \
-                or not os.path.isdir(abs_path_to_foundry_data) \
-                or not os.path.exists(abs_path_to_foundry_data):
-            raise FvttmvException("{0} has to be a normalized absolute path pointing to an existing folder"
-                                  .format(Keys.absolute_path_to_foundry_data_key))
+        if not check_path_to_foundry_data(abs_path_to_foundry_data):
+            raise FvttmvException("{0} is not configured correctly.".format(Keys.absolute_path_to_foundry_data_key))

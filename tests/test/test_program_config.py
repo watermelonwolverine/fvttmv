@@ -1,6 +1,7 @@
 import unittest
 
-from fvttmv.config import absolute_path_to_foundry_data_key, ProgramConfig, ProgramConfigImpl
+from fvttmv.config import Keys, ProgramConfig, ProgramConfigImpl, ConfigFileReader
+from fvttmv.exceptions import FvttmvException
 from test.common import *
 
 
@@ -13,35 +14,35 @@ class ProgramConfigImplTest(unittest.TestCase):
 
         # not absolute
         try:
-            ProgramConfigImpl({absolute_path_to_foundry_data_key: C.foundrydata})
+            ProgramConfigImpl(C.foundrydata)
             self.fail()
         except FvttmvException:
             pass
 
         # not normalized
         try:
-            ProgramConfigImpl({absolute_path_to_foundry_data_key: os.path.join(AbsPaths.Data, "..", C.Data)})
+            ProgramConfigImpl(os.path.join(AbsPaths.Data, "..", C.Data))
             self.fail()
         except FvttmvException:
             pass
 
         # not a directory
         try:
-            ProgramConfigImpl({absolute_path_to_foundry_data_key: os.path.abspath(C.Data)})
+            ProgramConfigImpl(os.path.abspath(C.Data))
             self.fail()
         except FvttmvException:
             pass
 
         try:
-            ProgramConfigImpl({absolute_path_to_foundry_data_key: os.path.abspath("does_not_exist")})
+            ProgramConfigImpl(os.path.abspath("does_not_exist"))
             self.fail()
         except FvttmvException:
             pass
 
     def test_abs_path_to_foundrydata(self):
-        config_dict = {absolute_path_to_foundry_data_key: AbsPaths.Data}
+        config_dict = {Keys.absolute_path_to_foundry_data_key: AbsPaths.Data}
 
-        config = ProgramConfigImpl(config_dict)
+        config = ConfigFileReader.parse_dict(config_dict)
 
         self.assertEqual(config.get_absolute_path_to_foundry_data(),
                          AbsPaths.Data)

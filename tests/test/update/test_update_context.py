@@ -1,6 +1,6 @@
 import unittest
 
-from fvttmv.update.update_context import UpdateContext
+from fvttmv.update.__update_context import UpdateContext
 from test.common import *
 
 

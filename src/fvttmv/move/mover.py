@@ -2,9 +2,9 @@ import os
 from typing import List
 
 from fvttmv.config import RunConfig, ProgramConfigChecker
-from fvttmv.move.directory_mover import DirectoryMover
-from fvttmv.move.file_mover import FileMover
-from fvttmv.move.mover_pre_checker import PreMoveChecker
+from fvttmv.move.__directory_mover import DirectoryMover
+from fvttmv.move.__file_mover import FileMover
+from fvttmv.move.__mover_pre_checker import PreMoveChecker
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.move.reference_update_confirm import ReferenceUpdateConfirm
 from fvttmv.path_tools import PathTools

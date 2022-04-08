@@ -2,9 +2,9 @@ import logging
 import os
 from typing import Callable, List
 
+from fvttmv.config import RunConfig
 from fvttmv.exceptions import FvttmvException
 from fvttmv.path_tools import PathTools
-from fvttmv.config import RunConfig
 from fvttmv.update.references_updater import ReferencesUpdater
 
 cannot_move_msg = "Cannot move {0} to {1}: Operation not permitted"

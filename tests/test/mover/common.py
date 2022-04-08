@@ -3,10 +3,10 @@ import os
 import unittest
 from typing import List
 
+from fvttmv.config import RunConfig, ProgramConfig, ProgramConfigImpl
 from fvttmv.iterators.directory_walker import DirectoryWalkerCallback, DirectoryWalker
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
-from fvttmv.config import RunConfig, absolute_path_to_foundry_data_key, ProgramConfig, ProgramConfigImpl
 from fvttmv.update.references_updater import ReferencesUpdater
 from test.common import AbsPaths, C, Setup
 
@@ -159,7 +159,7 @@ class MoverTestBase(unittest.TestCase):
     def setUp(self) -> None:
         Setup.setup_working_environment()
         # config
-        self.program_config = ProgramConfigImpl({absolute_path_to_foundry_data_key: AbsPaths.Data})
+        self.program_config = ProgramConfigImpl(AbsPaths.Data)
         self.run_config = RunConfig(self.program_config)
         # workers
         self.references_updater_mock = ReferencesUpdaterMock()

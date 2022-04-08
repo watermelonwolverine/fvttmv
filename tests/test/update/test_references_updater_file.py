@@ -1,6 +1,6 @@
 import unittest
 
-from fvttmv.update.references_updater_file import ReferencesUpdaterFile
+from fvttmv.update.__references_updater_file import ReferencesUpdaterFile
 from test.common import Setup, References, AbsPaths, DataStrings
 
 

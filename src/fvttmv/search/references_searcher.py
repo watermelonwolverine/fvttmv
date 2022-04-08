@@ -6,7 +6,7 @@ from typing import List
 from fvttmv.exceptions import FvttmvException
 from fvttmv.iterators.directory_walker import DirectoryWalker, DirectoryWalkerCallback
 from fvttmv.path_tools import PathTools
-from fvttmv.search.references_searcher_db_files import ReferencesSearcherDbFiles
+from fvttmv.search.__references_searcher_db_files import ReferencesSearcherDbFiles
 
 
 class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):

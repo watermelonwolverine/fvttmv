@@ -2,8 +2,8 @@ import unittest
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.reference_tools import ReferenceTools
-from fvttmv.update.references_updater_string import ReferencesUpdaterString
-from fvttmv.update.update_context import UpdateContext
+from fvttmv.update.__references_updater_string import ReferencesUpdaterString
+from fvttmv.update.__update_context import UpdateContext
 from test.common import DataStrings, References
 
 

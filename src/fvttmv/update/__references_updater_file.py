@@ -1,7 +1,7 @@
 import logging
 
-from fvttmv.update.references_updater_string import ReferencesUpdaterString
-from fvttmv.update.update_context import UpdateContext
+from fvttmv.update.__references_updater_string import ReferencesUpdaterString
+from fvttmv.update.__update_context import UpdateContext
 
 
 class ReferencesUpdaterFile:

@@ -1,4 +1,4 @@
-from fvttmv.search.references_searcher_string import ReferencesSearcherString
+from fvttmv.search.__references_searcher_string import ReferencesSearcherString
 
 
 class ReferencesSearcherFile:

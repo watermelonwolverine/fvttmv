@@ -1,9 +1,8 @@
 import unittest
 
 from fvttmv.exceptions import FvttmvException
-from test.common import *
-
 from fvttmv.iterators.db_files_iterator import DbFilesIterator
+from test.common import *
 
 
 class DbFilesIteratorTest(unittest.TestCase):
