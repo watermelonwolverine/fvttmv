@@ -16,3 +16,9 @@
 0.2.2
 =====
 - Fixed ubuntu install script
+
+0.2.3
+=====
+- Improved build scripts
+- Now also supporting python 3.8 when building python package
+- Decreased some logging levels
