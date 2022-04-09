@@ -10,7 +10,7 @@ class ReferencesUpdaterFile:
     def replace_references_in_file(path_to_db_file: str,
                                    old_reference: str,
                                    new_reference: str) -> None:
-        logging.info("Replacing references to %s with %s in %s",
+        logging.debug("Replacing references to %s with %s in %s",
                      old_reference,
                      new_reference,
                      path_to_db_file)
@@ -27,7 +27,7 @@ class ReferencesUpdaterFile:
                                                    new_reference)
 
         if not update_context.data_was_updated:
-            logging.info("No references found in %s.", path_to_db_file)
+            logging.debug("No references found in %s.", path_to_db_file)
             return
 
         with open(path_to_db_file, "wt", encoding="utf-8", newline='') as fout:

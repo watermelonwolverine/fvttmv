@@ -41,7 +41,7 @@ Install pyInstaller package:
 
 Run build file:
 
-`.\build_for_windows.cmd`
+`.\scripts\build_for_windows.cmd`
 
 You should now have a fvttmv.exe file under dist. After the build succeeded you can delete the venv you previously
 created.
@@ -88,7 +88,7 @@ Download or clone repo.
 
 Run the install.py script inside the project folder with
 
-`sudo python3 install_on_ubuntu.py`
+`sudo python3 scripts/install_on_ubuntu.py`
 
 and follow the installation instructions.
 
