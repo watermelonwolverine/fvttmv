@@ -1,25 +1,11 @@
-import os
+import sys
 
 import setuptools
 
+sys.path.append("src")
 
-def get_version() -> str:
-    path_to_version = os.path.join("src", "fvttmv", "_version.py")
-
-    version_py_text: str
-
-    with open(path_to_version, "rt", encoding="utf-8") as fh:
-        version_py_text = fh.read()
-
-    splits = version_py_text.split("\"")
-
-    if len(splits) != 3:
-        raise Exception()
-    else:
-        return splits[1]
-
-
-version = get_version()
+from fvttmv_wrapper.__constants import app_name, author, url, issues_url
+from fvttmv.__version import __version__
 
 long_description: str
 
@@ -27,16 +13,16 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="fvttmv",
-    version=version,
-    author="watermelonwolverine",
+    name=app_name,
+    version=__version__,
+    author=author,
     author_email="29666253+watermelonwolverine@users.noreply.github.com",
     description="Moves files while also updating FoundryVTT databases",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/watermelonwolverine/fvttmv",
+    url=url,
     project_urls={
-        "Bug Tracker": "https://github.com/watermelonwolverine/fvttmv/issues",
+        "Bug Tracker": issues_url,
     },
     classifiers=[
         "Programming Language :: Python :: 3",

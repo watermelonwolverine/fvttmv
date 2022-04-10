@@ -1,11 +1,13 @@
 import logging
 import os
 import sys
+import traceback
 from os import path
 from typing import List
 
+import __help_texts
 import fvttmv
-import help_text
+from __constants import app_name, config_file_name, path_to_config_file_linux, issues_url
 from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
@@ -14,9 +16,6 @@ from fvttmv.path_tools import PathTools
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 
-app_name = "fvttmv"
-config_file_name = "{0}.conf".format(app_name)
-path_to_config_file_linux = "/etc/{0}".format(config_file_name)
 version_option = "--version"
 verbose_info_option = "--verbose-info"
 verbose_debug_option = "--verbose-debug"
@@ -33,6 +32,8 @@ allowed_args = [
     force_option,
     help_option
 ]
+
+bug_report_message = "Please file a bug report on %s" % issues_url
 
 
 def get_path_to_config_file():
@@ -207,7 +208,7 @@ def do_run() -> None:
                   sys.argv)
 
     if help_option in args:
-        print(help_text.help_text)
+        print(__help_texts.help_text)
         return
 
     if version_option in args:
@@ -232,6 +233,7 @@ def do_run() -> None:
             raise FvttmvException("Destination argument missing")
 
         source_paths = args[0:-1]
+
         destination_path = args[-1]  # last arg is destination arg
 
         perform_move_with(source_paths,
@@ -242,17 +244,22 @@ def do_run() -> None:
 def main() -> None:
     try:
         do_run()
-    except FvttmvInternalException as internal_exception:
-        logging.error(internal_exception)
-        print("An internal error occurred: " + str(internal_exception))
+    except FvttmvInternalException:
+        formatted = traceback.format_exc()
+        logging.error(formatted)
+        print("An internal error occurred: " + str(formatted))
+        print(bug_report_message)
     except FvttmvException as exception:
+        # these are expected to happen sometimes - don't print the whole stack
         logging.error(exception)
         print(str(exception))
     except SystemExit:
         pass
-    except BaseException as unexpected_exception:
-        logging.error(unexpected_exception)
-        print("An unexpected error occurred: " + str(unexpected_exception))
+    except BaseException:
+        formatted = traceback.format_exc()
+        logging.error(formatted)
+        print("An unexpected error occurred: " + str(formatted))
+        print(bug_report_message)
 
 
 if __name__ == "__main__":

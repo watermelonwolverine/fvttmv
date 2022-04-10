@@ -9,7 +9,7 @@ from os import path
 sys.path.append("src")
 
 from fvttmv.config import Keys
-from main import app_name, path_to_config_file_linux
+from fvttmv_wrapper.__constants import app_name, path_to_config_file_linux
 
 path_to_executable_file = "/usr/bin/{0}".format(app_name)
 
@@ -20,18 +20,15 @@ def prepare_archive():
 
     os.mkdir("temp")
 
-    shutil.copy("src/main.py",
-                "temp/")
-
-    shutil.copy("src/help_text.py",
-                "temp/")
-
     shutil.copytree("src/{0}".format(app_name),
                     "temp/{0}".format(app_name))
 
+    shutil.copytree("src/{0}".format("%s_wrapper" % app_name),
+                    "temp/{0}".format("%s_wrapper" % app_name))
+
     zipapp.create_archive("temp",
                           "{0}.pyz".format(app_name),
-                          main="main:main",
+                          main="main:fvttmv_wrapper.main",
                           interpreter="python3")
 
     shutil.rmtree("temp")

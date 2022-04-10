@@ -62,7 +62,7 @@ Copy `{"absolute_path_to_foundry_data":"INSERT_PATH_HERE"}` into fvttmv.conf
 Replace `INSERT_PATH_HERE` with the path to the Data folder inside your foundrydata
 (Not the foundrydata folder itself!).
 
-IMPORTANT: Escape all \\ with \\\\ in that path.
+IMPORTANT: Escape all `\` with `\\` in that path.
 
 It should look something like this:
 
@@ -112,21 +112,29 @@ Syntax
 
 `fvttmv [--verbose-info, --verbose-debug, --version, --no-move, --check, --help] src [*srcs] [dst]`
 
-`src`: Source path which should be moved or checked\
-`*srcs`: Optional additional source paths\
+`src`: Source path which should be moved or checked
+
+`*srcs`: Optional additional source paths
+
 `dst`: Path to destination folder or file, needed when not using the --check option
 
 Options
 -------
 
-`--verbose-info`: Enables verbose output to console\
-`--verbose-debug`: Enables very verbose output to console\
-`--version`: Prints version and exits\
+`--verbose-info`: Enables verbose output to console
+
+`--verbose-debug`: Enables very verbose output to console
+
+`--version`: Prints version and exits
+
 `--no-move`: Doesn't actually move any files, but updates FoundryVTT databases as if it did, useful for repairing broken
-references\
+references
+
 `--check`: Doesn't move any file, looks for references to those files. Useful when you want to delete files. Doesn't use
-the `dst` argument, instead interprets all given paths as source paths\
-`--force` Don't ask before overriding files\
+the `dst` argument, instead interprets all given paths as source paths
+
+`--force` Don't ask before overriding files
+
 `--help` Display help and exit
 
 Examples
@@ -134,10 +142,10 @@ Examples
 
 Renaming/Moving a file:
 
-Ubuntu:  
+Ubuntu:
 `fvttmv old/path/to/file1 new/path/to/file1`
 
-Windows:  
+Windows:
 `fvttmv.exe old\path\to\file1 new\path\to\file1`
 
 Moving multiple files into an existing folder:
@@ -194,4 +202,3 @@ When one of the paths has `\'` at the end, the arguments will get mixed up. This
 handles arguments and probably can't be fixed. For example on
 Windows `fvttmv.exe '\folder name with spaces\' .\some\other\path`
 will fail but `fvttmv.exe '\folder name with spaces' .\some\other\path` will succeed.
-
