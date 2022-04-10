@@ -11,9 +11,9 @@ class ReferencesUpdaterFile:
                                    old_reference: str,
                                    new_reference: str) -> None:
         logging.debug("Replacing references to %s with %s in %s",
-                     old_reference,
-                     new_reference,
-                     path_to_db_file)
+                      old_reference,
+                      new_reference,
+                      path_to_db_file)
 
         data: str
 

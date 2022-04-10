@@ -166,6 +166,7 @@ class PathTools:
             # nothing to do
             return escaped_name
 
+        # noinspection PyPep8
         result = lower[0:index_of_difference] + \
                  "[" + lower[index_of_difference] + "]" \
                  + lower[index_of_difference + 1:]

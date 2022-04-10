@@ -8,7 +8,9 @@ from os import path
 
 sys.path.append("src")
 
+# noinspection PyPep8
 from fvttmv.config import Keys
+# noinspection PyPep8
 from fvttmv_wrapper.__constants import app_name, path_to_config_file_linux
 
 path_to_executable_file = "/usr/bin/{0}".format(app_name)
