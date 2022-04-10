@@ -13,8 +13,8 @@ from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.path_tools import PathTools
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
-from fvttmv_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
-from fvttmv_wrapper.__help_texts import help_text
+from cli_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
+from cli_wrapper.__help_texts import help_text
 
 version_option = "--version"
 verbose_info_option = "--verbose-info"

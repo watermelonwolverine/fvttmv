@@ -13,13 +13,13 @@ Step 1: Get the exe
 
 ### Option 1: Download
 
-Download one of the pre-built fvttmv.exe files from `Releases`
+Download one of the pre-built `fvttmv.exe` files from `Releases`
 
-Goto Step 2: Install program
+Go to Step 2: Install program
 
 ### Option 2: Build it yourself
 
-Install python3 (version >= 3.9) and add it to your PATH system environment variable.
+Install python3 (version >= 3.8) and add it to your PATH system environment variable.
 
 You can check the version via CMD or powershell with:
 
@@ -37,16 +37,16 @@ Activate the venv:
 
 Install pyInstaller package:
 
-`pip install pyInstaller`
+`pip install pyInstaller==4.10`
 
 Run build file:
 
 `.\scripts\build_for_windows.cmd`
 
-You should now have a fvttmv.exe file under dist. After the build succeeded you can delete the venv you previously
-created.
+You should now have a fvttmv.exe file under dist. After the build succeeded you can delete the venv you
+previously created.
 
-Goto Step 2: Install program
+Go to Step 2: Install program
 
 Step 2: Install program
 -----------------------
@@ -66,7 +66,7 @@ IMPORTANT: Escape all `\` with `\\` in that path.
 
 It should look something like this:
 
-`{"absolute_path_to_foundry_data":"C:Users\\user\\foundrydata\\Data"}`
+`{"absolute_path_to_foundry_data":"C:\\Users\\user\\foundrydata\\Data"}`
 
 Add the installation path to your PATH system environment variable.
 
@@ -77,20 +77,91 @@ Delete fvttmv.exe and fvttmv.conf files from the installation directory.
 
 Remove the path to the installation directory from the PATH system environment variable.
 
-Installation: Ubuntu
-====================
+Installation: Ubuntu 16.04 -20.04
+=================================
 
-Install python3 if not yet installed
+Optional: Install Python
+------------------------
 
-`sudo apt install python3`
+An up-to-date Ubuntu 20.04 should have python >= 3.8. Check it with:
+
+`python3 --version`
+
+From here on `pythonX` will be used as placeholder for the python you should use. Depending on your system you need to
+replace `X` with `3`, `3.8`, `3.9` or `3.10` .
+
+Install python version>=3.8 if not yet installed.
+
+`sudo apt install pythonX`
+
+Step 1: Get the executable
+--------------------------
+
+### Option 1: Download
+
+Download one of the pre-built `fvttmv` files from `Releases`
+
+Go to Step 2: Install the files
+
+### Option 2: Build it yourself
+
+Install python if haven't already.
 
 Download or clone repo.
 
-Run the install.py script inside the project folder with
+Create venv inside the repo:
 
-`sudo python3 scripts/install_on_ubuntu.py`
+`sudo apt install pythonX-venv`
 
-and follow the installation instructions.
+`pythonX -m venv ./venv`
+
+Activate venv:
+
+`source venv/bin/activate`
+
+Install pyInstaller:
+
+`pythonX -m pip install pyInstaller==4.10`
+
+Now run the build script:
+
+`./scrips/build_for_ubuntu.sh`
+
+Step 2: Install the files
+-------------------------
+
+### Option 1: Automatic installation
+
+Install python if you haven't already.
+
+Clone the repo if you haven't already.
+
+Go into the project folder.
+
+Build the project if you haven't already. If you downloaded a pre-built executable. Create a folder named `dist` and move the file there. 
+
+Inside the project folder run:
+
+`sudo pythonX scripts/install_on_ubuntu.sh`
+
+### Option 2: Manual installation
+
+Copy the `fvttmv` file either from `dist` from where you downloaded it to `usr/bin/fvttmv`
+
+Make the file executable:
+
+`sudo chmod ugo=rx usr/bin/fvttmv`
+
+Create a `fvttmv.conf` file at `/etc/`
+
+Copy `{"absolute_path_to_foundry_data":"INSERT_PATH_HERE"}` into `fvttmv.conf`
+
+Replace `INSERT_PATH_HERE` with the path to the Data folder inside your foundrydata
+(Not the foundrydata folder itself!).
+
+It should look something like this:
+
+`{"absolute_path_to_foundry_data":"/home/user/foundrydata/Data"}`
 
 Uninstallation: Ubuntu
 ======================

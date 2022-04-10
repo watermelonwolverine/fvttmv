@@ -5,7 +5,7 @@ import setuptools
 sys.path.append("src")
 
 # noinspection PyPep8
-from fvttmv_wrapper.__constants import app_name, author, url, issues_url
+from cli_wrapper.__constants import app_name, author, url, issues_url
 # noinspection PyPep8
 from fvttmv import __version__
 

@@ -1,1 +1,1 @@
-pyinstaller .\src\fvttmv_wrapper\main.py --onefile --clean --name fvttmv.exe
+pyinstaller .\src\cli_wrapper\main.py --onefile --clean --name fvttmv.exe
