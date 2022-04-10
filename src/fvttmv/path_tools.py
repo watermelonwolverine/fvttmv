@@ -1,3 +1,4 @@
+import glob
 import os.path
 import sys
 
@@ -116,3 +117,57 @@ class PathTools:
     def paths_are_the_same(path1: str,
                            path2: str):
         return PathTools.maybe_lower_case_path(path1) == PathTools.maybe_lower_case_path(path2)
+
+    @staticmethod
+    def get_correctly_cased_path(abs_path):
+
+        if not os.path.exists(abs_path):
+            raise FvttmvException("Cannot correctly case path that does not exist: %s" % abs_path)
+
+        PathTools.assert_path_format_is_ok(abs_path)
+
+        if sys.platform == "linux":
+            return abs_path
+        if sys.platform == "win32":
+            return PathTools.__get_correctly_case_windows_path(abs_path)
+
+    @staticmethod
+    def __get_correctly_case_windows_path(abs_path: str):
+
+        splits = abs_path.split('\\')
+
+        # disk letter
+        wildcard_expression = [splits[0].upper()]
+        for name in splits[1:]:
+            wildcard_expression.append(PathTools.__prepare_name_for_glob(name))
+
+        res = glob.glob('\\'.join(wildcard_expression))
+        if len(res) != 1:
+            raise FvttmvInternalException("Unable to correctly case windows path: %s" % abs_path)
+
+        return res[0]
+
+    @staticmethod
+    def __prepare_name_for_glob(name: str):
+
+        escaped_name = glob.escape(name)
+
+        upper = escaped_name.upper()
+        lower = escaped_name.lower()
+
+        index_of_difference: int = -1
+
+        for i in range(0, len(upper)):
+            if upper[i] != lower[i]:
+                index_of_difference = i
+                break
+
+        if index_of_difference == -1:
+            # nothing to do
+            return escaped_name
+
+        result = lower[0:index_of_difference] + \
+                 "[" + lower[index_of_difference] + "]" \
+                 + lower[index_of_difference + 1:]
+
+        return result

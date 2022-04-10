@@ -55,7 +55,10 @@ class Mover:
         self.pre_move_checker.perform_pre_checks(src_list,
                                                  dst)
 
-        for src in src_list:
+        # Windows is not case sensitive -> correct cases of path to avoid problems
+        case_corrected_src_list = [PathTools.get_correctly_cased_path(src) for src in src_list]
+
+        for src in case_corrected_src_list:
             self._move_single(src,
                               dst,
                               depth)

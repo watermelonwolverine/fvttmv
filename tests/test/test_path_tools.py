@@ -143,3 +143,69 @@ class PathToolsTest(unittest.TestCase):
             result = PathTools.contains_illegal_characters(AbsPaths.Data + char)
 
             self.assertEqual(result, True)
+
+    def test_get_correctly_case_path1(self):
+        print("test_get_correctly_case_path1")
+
+        dir_path = os.path.join(AbsPaths.Data, "folder_name[")
+
+        os.mkdir(dir_path)
+
+        result = PathTools.get_correctly_cased_path(dir_path.upper())
+
+        self.assertEqual(dir_path, result)
+
+    def test_get_correctly_case_path2(self):
+        print("test_get_correctly_case_path2")
+
+        dir_path = os.path.join(AbsPaths.Data, "folder_name]")
+
+        os.mkdir(dir_path)
+
+        result = PathTools.get_correctly_cased_path(dir_path.upper())
+
+        self.assertEqual(dir_path, result)
+
+    def test_get_correctly_case_path3(self):
+        print("test_get_correctly_case_path3")
+
+        dir_path = os.path.join(AbsPaths.Data, "folder_name[blabla]")
+
+        os.mkdir(dir_path)
+
+        result = PathTools.get_correctly_cased_path(dir_path.upper())
+
+        self.assertEqual(dir_path, result)
+
+    def test_get_correctly_case_path4(self):
+        print("test_get_correctly_case_path4")
+
+        dir_path = os.path.join(AbsPaths.Data, "[folder_name")
+
+        os.mkdir(dir_path)
+
+        result = PathTools.get_correctly_cased_path(dir_path.upper())
+
+        self.assertEqual(dir_path, result)
+
+    def test_get_correctly_case_path5(self):
+        print("test_get_correctly_case_path5")
+
+        dir_path = os.path.join(AbsPaths.Data, "]folder_name")
+
+        os.mkdir(dir_path)
+
+        result = PathTools.get_correctly_cased_path(dir_path.upper())
+
+        self.assertEqual(dir_path, result)
+
+    def test_get_correctly_case_path6(self):
+        print("test_get_correctly_case_path6")
+
+        dir_path = os.path.join(AbsPaths.Data, "][folder_name]")
+
+        os.mkdir(dir_path)
+
+        result = PathTools.get_correctly_cased_path(dir_path.upper())
+
+        self.assertEqual(dir_path, result)

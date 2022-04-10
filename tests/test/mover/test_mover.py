@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 
 from test.common import AbsPaths, References, C, ref, FileContents
 from test.mover.common import MoverTestBase, ReplaceReferenceCall, ConfirmOverrideCall, unchanged_directory_tree
@@ -623,6 +624,66 @@ class MoverTest(MoverTestBase):
                                        new_filename)
 
         self.mover.move([AbsPaths.file1_png],
+                        target_location)
+
+        self.directory_walker.walk_directory(AbsPaths.Data)
+
+        expected = [AbsPaths.assets,
+                    AbsPaths.images,
+                    os.path.join(AbsPaths.images, new_filename),
+                    AbsPaths.file2_png,
+                    AbsPaths.sub_folder,
+                    AbsPaths.file3_png,
+                    os.path.join(AbsPaths.Data, C.Logs),
+                    AbsPaths.worlds,
+                    os.path.join(AbsPaths.worlds, C.not_a_world1),
+                    os.path.join(AbsPaths.worlds, C.not_a_world1, C.data),
+                    os.path.join(AbsPaths.worlds, C.not_a_world1, C.packs),
+                    os.path.join(AbsPaths.worlds, C.not_a_world1, C.scenes),
+                    os.path.join(AbsPaths.worlds, C.not_a_world2),
+                    os.path.join(AbsPaths.worlds, C.not_a_world2, C.world_json),
+                    os.path.join(AbsPaths.worlds, C.world1),
+                    os.path.join(AbsPaths.worlds, C.world1, C.data),
+                    os.path.join(AbsPaths.worlds, C.world1, C.data, C.contains_1_db),
+                    os.path.join(AbsPaths.worlds, C.world1, C.packs),
+                    os.path.join(AbsPaths.worlds, C.world1, C.packs, C.contains_2_db),
+                    os.path.join(AbsPaths.worlds, C.world1, C.scenes),
+                    os.path.join(AbsPaths.worlds, C.world1, C.world_json),
+                    os.path.join(AbsPaths.worlds, C.world2),
+                    os.path.join(AbsPaths.worlds, C.world2, C.data),
+                    os.path.join(AbsPaths.worlds, C.world2, C.data, C.contains_1_and_2_db),
+                    os.path.join(AbsPaths.worlds, C.world2, C.data, C.not_a_db_txt),
+                    os.path.join(AbsPaths.worlds, C.world2, C.packs),
+                    os.path.join(AbsPaths.worlds, C.world2, C.packs, C.contains_none_db),
+                    os.path.join(AbsPaths.worlds, C.world2, C.scenes),
+                    os.path.join(AbsPaths.worlds, C.world2, C.world_json)]
+
+        self.assertEqual(self.walker_callback.result,
+                         expected)
+
+        expected_update_reference_call = \
+            [
+                ReplaceReferenceCall(References.file1_original,
+                                     ref(C.assets, C.images, new_filename))
+            ]
+
+        self.assert_reference_updater_calls_equal(expected_update_reference_call)
+
+        self.assert_no_override_confirms()
+
+    def test_rename_file_wrong_case(self):
+        print("test_rename_file_wrong_case")
+
+        if sys.platform != "win32":
+            print("SKIPPED")
+            return
+
+        new_filename = "file1_after_renaming.png"
+
+        target_location = os.path.join(AbsPaths.images,
+                                       new_filename)
+
+        self.mover.move([AbsPaths.file1_png.upper()],
                         target_location)
 
         self.directory_walker.walk_directory(AbsPaths.Data)
