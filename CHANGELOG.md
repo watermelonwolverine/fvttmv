@@ -22,3 +22,8 @@
 - Improved build scripts
 - Now also supporting python 3.8 when building python package
 - Decreased some logging levels
+
+0.2.4
+=====
+- Fixed issue with wrongly cased paths in windows
+- Reduced help/readme duplication
