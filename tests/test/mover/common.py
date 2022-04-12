@@ -1,5 +1,4 @@
 import json
-import os
 import unittest
 from typing import List
 
@@ -7,39 +6,9 @@ from fvttmv.config import RunConfig, ProgramConfig, ProgramConfigImpl
 from fvttmv.iterators.directory_walker import DirectoryWalkerCallback, DirectoryWalker
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
+from fvttmv.move.reference_update_confirm import ReferenceUpdateConfirm
 from fvttmv.update.references_updater import ReferencesUpdater
-from test.common import AbsPaths, C, Setup
-
-unchanged_directory_tree = [
-    AbsPaths.assets,
-    AbsPaths.images,
-    AbsPaths.file1_png,
-    AbsPaths.file2_png,
-    AbsPaths.sub_folder,
-    AbsPaths.file3_png,
-    os.path.join(AbsPaths.Data, C.Logs),
-    AbsPaths.worlds,
-    os.path.join(AbsPaths.worlds, C.not_a_world1),
-    os.path.join(AbsPaths.worlds, C.not_a_world1, C.data),
-    os.path.join(AbsPaths.worlds, C.not_a_world1, C.packs),
-    os.path.join(AbsPaths.worlds, C.not_a_world1, C.scenes),
-    os.path.join(AbsPaths.worlds, C.not_a_world2),
-    os.path.join(AbsPaths.worlds, C.not_a_world2, C.world_json),
-    os.path.join(AbsPaths.worlds, C.world1),
-    os.path.join(AbsPaths.worlds, C.world1, C.data),
-    os.path.join(AbsPaths.worlds, C.world1, C.data, C.contains_1_db),
-    os.path.join(AbsPaths.worlds, C.world1, C.packs),
-    os.path.join(AbsPaths.worlds, C.world1, C.packs, C.contains_2_db),
-    os.path.join(AbsPaths.worlds, C.world1, C.scenes),
-    os.path.join(AbsPaths.worlds, C.world1, C.world_json),
-    os.path.join(AbsPaths.worlds, C.world2),
-    os.path.join(AbsPaths.worlds, C.world2, C.data),
-    os.path.join(AbsPaths.worlds, C.world2, C.data, C.contains_1_and_2_db),
-    os.path.join(AbsPaths.worlds, C.world2, C.data, C.not_a_db_txt),
-    os.path.join(AbsPaths.worlds, C.world2, C.packs),
-    os.path.join(AbsPaths.worlds, C.world2, C.packs, C.contains_none_db),
-    os.path.join(AbsPaths.worlds, C.world2, C.scenes),
-    os.path.join(AbsPaths.worlds, C.world2, C.world_json)]
+from test.common import AbsPaths, Setup
 
 
 class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):
@@ -131,6 +100,8 @@ class ConfirmOverrideCall:
 class OverrideConfirmMock(OverrideConfirm):
     calls: List[ConfirmOverrideCall]
 
+    default_answer = True
+
     # noinspection PyMissingConstructor
     def __init__(self):
         self.calls = []
@@ -143,32 +114,77 @@ class OverrideConfirmMock(OverrideConfirm):
 
         self.calls.append(call)
 
-        return True
+        return self.default_answer
+
+
+class ReferenceUpdateConfirmMock(ReferenceUpdateConfirm):
+    calls: List[ConfirmOverrideCall]
+
+    default_answer = True
+
+    # noinspection PyMissingConstructor
+    def __init__(self):
+        self.calls = []
+
+    def confirm_reference_update(self,
+                                 abs_path_to_src_file,
+                                 abs_path_to_dst_file) -> bool:
+        call = ConfirmOverrideCall(abs_path_to_src_file,
+                                   abs_path_to_dst_file)
+
+        self.calls.append(call)
+
+        return self.default_answer
 
 
 class MoverTestBase(unittest.TestCase):
+    # config
     program_config: ProgramConfig
     run_config: RunConfig
-    # workers
+    # mocks
     reference_updater_mock: ReferencesUpdaterMock
     override_confirm_mock: OverrideConfirmMock
-    walker_callback: DirectoryWalkerCallbackImpl
-    directory_walker: DirectoryWalker
+    reference_reference_confirm_mock: ReferenceUpdateConfirmMock
+    # workers
+    __walker_callback: DirectoryWalkerCallbackImpl
+    __directory_walker: DirectoryWalker
+    # context
+    __unchanged_directory_tree: List[str]
+    expected_directory_tree: List[str]
+
     mover: Mover
 
     def setUp(self) -> None:
         Setup.setup_working_environment()
-        # config
-        self.program_config = ProgramConfigImpl(AbsPaths.Data)
-        self.run_config = RunConfig(self.program_config)
-        # workers
-        self.references_updater_mock = ReferencesUpdaterMock()
-        self.override_confirm_mock = OverrideConfirmMock()
-        self.walker_callback = DirectoryWalkerCallbackImpl()
-        self.directory_walker = DirectoryWalker(self.walker_callback)
+
+        self.__instantiate_configs()
+        self.__instantiate_mocks()
+        self.__instantiate_workers()
+        self.__remember_unchanged_dir_tree()
+
         self.mover = Mover(self.run_config,
                            self.references_updater_mock,
-                           self.override_confirm_mock)
+                           self.override_confirm_mock,
+                           self.reference_reference_confirm_mock)
+
+    def __instantiate_configs(self):
+        self.program_config = ProgramConfigImpl(AbsPaths.Data)
+        self.run_config = RunConfig(self.program_config)
+
+    def __instantiate_mocks(self):
+        self.references_updater_mock = ReferencesUpdaterMock()
+        self.override_confirm_mock = OverrideConfirmMock()
+        self.reference_reference_confirm_mock = ReferenceUpdateConfirmMock()
+
+    def __instantiate_workers(self):
+        self.__walker_callback = DirectoryWalkerCallbackImpl()
+        self.__directory_walker = DirectoryWalker(self.__walker_callback)
+
+    def __remember_unchanged_dir_tree(self):
+        self.__directory_walker.walk_directory(AbsPaths.Data)
+        self.__unchanged_directory_tree = self.__walker_callback.result[:]
+        self.__walker_callback.result.clear()
+        self.expected_directory_tree = self.__unchanged_directory_tree.copy()
 
     def assert_no_override_confirms(self):
         self.assert_overrides_confirms_equal([])
@@ -179,7 +195,8 @@ class MoverTestBase(unittest.TestCase):
                          self.override_confirm_mock.calls)
 
     def assert_no_files_were_moved(self):
-        self.assert_directory_tree_equals(unchanged_directory_tree)
+        self.expected_directory_tree = self.__unchanged_directory_tree
+        self.assert_directory_tree()
 
     def assert_no_references_updated(self):
         self.assert_reference_updater_calls_equal(self.references_updater_mock.calls)
@@ -194,12 +211,11 @@ class MoverTestBase(unittest.TestCase):
         self.assertEqual(expected_reference_updater_calls,
                          self.references_updater_mock.calls)
 
-    def assert_directory_tree_equals(self,
-                                     expected_directory_tree: List[str]):
-        self.directory_walker.walk_directory(AbsPaths.Data)
+    def assert_directory_tree(self):
+        self.__directory_walker.walk_directory(AbsPaths.Data)
 
-        self.assertEqual(self.walker_callback.result,
-                         expected_directory_tree)
+        self.assertEqual(self.expected_directory_tree,
+                         self.__walker_callback.result)
 
     def assert_file_contains(self,
                              path_to_file: str,
@@ -207,3 +223,15 @@ class MoverTestBase(unittest.TestCase):
         with open(path_to_file, "r", encoding='UTF-8', newline='') as fin:
             text_content_of_file = fin.read()
             self.assertEqual(expected_text_content, text_content_of_file)
+
+    def replace_path(self,
+                     element_to_replace: str,
+                     new_element: str):
+        index = self.expected_directory_tree.index(element_to_replace)
+        self.expected_directory_tree[index] = new_element
+        self.expected_directory_tree.sort(key=str.lower)
+
+    def add_path(self,
+                 element_to_add: str):
+        self.expected_directory_tree.append(element_to_add)
+        self.expected_directory_tree.sort(key=str.lower)
