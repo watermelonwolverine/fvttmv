@@ -19,28 +19,35 @@ class DbFilesIterator:
     def iterate_through_world_dir(abs_path_to_world_dir: str):
 
         PathTools.assert_path_format_is_ok(abs_path_to_world_dir)
-
-        if not os.path.isdir(abs_path_to_world_dir):
-            raise FvttmvInternalException("{0} is not a directory.".format(abs_path_to_world_dir))
+        DbFilesIterator.__assert_path_is_dir(abs_path_to_world_dir)
 
         for directory in dirs_to_look_for_db_file:
-            path_to_dir = os.path.join(abs_path_to_world_dir, directory)
-            for element in os.listdir(path_to_dir):
-                path_to_element = os.path.join(path_to_dir, element)
+            abs_path_to_dir = os.path.join(abs_path_to_world_dir, directory)
+            for db_file in DbFilesIterator.iterate_through_dir(abs_path_to_dir):
+                yield db_file
 
-                if not os.path.isfile(path_to_element):
-                    continue
+    @staticmethod
+    def iterate_through_dir(abs_path_to_dir: str):
 
-                if element in db_files_to_ignore:
-                    continue
+        PathTools.assert_path_format_is_ok(abs_path_to_dir)
 
-                if element.endswith(".db"):
-                    yield path_to_element
+        for element in os.listdir(abs_path_to_dir):
+            path_to_element = os.path.join(abs_path_to_dir, element)
+
+            if not os.path.isfile(path_to_element):
+                continue
+
+            if element in db_files_to_ignore:
+                continue
+
+            if element.endswith(".db"):
+                yield path_to_element
 
     @staticmethod
     def iterate_through_all_worlds(abs_path_to_foundry_data: str):
 
         PathTools.assert_path_format_is_ok(abs_path_to_foundry_data)
+        DbFilesIterator.__assert_path_is_dir(abs_path_to_foundry_data)
 
         worlds_finder = WorldsFinder(abs_path_to_foundry_data)
 
@@ -49,3 +56,8 @@ class DbFilesIterator:
         for path_to_world_dir in world_dirs:
             for db_file in DbFilesIterator.iterate_through_world_dir(path_to_world_dir):
                 yield db_file
+
+    @staticmethod
+    def __assert_path_is_dir(path: str):
+        if not os.path.isdir(path):
+            raise FvttmvInternalException("{0} is not a directory.".format(path))

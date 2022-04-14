@@ -10,9 +10,11 @@ class ReferencesUpdaterTest(unittest.TestCase):
         Setup.setup_working_environment()
 
     def test_replace_references(self):
-        ReferencesUpdater._do_replace_references(AbsPaths.Data,
-                                                 References.file1_original,
-                                                 References.file1_replacement)
+        referencesUpdater = ReferencesUpdater(AbsPaths.Data,
+                                              [])
+
+        referencesUpdater.replace_references(References.file1_original,
+                                             References.file1_replacement)
 
         with open(AbsPaths.contains_1_db, "r", encoding="utf-8", newline='') as fin:
             data = fin.read()

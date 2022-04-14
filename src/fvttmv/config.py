@@ -151,10 +151,10 @@ class ProgramConfigChecker:
 
         additional_targets_to_update = program_config.get_additional_targets_to_update()
 
-        ProgramConfigChecker.assert_additional_targets_are_ok(additional_targets_to_update)
+        ProgramConfigChecker.assert_additional_targets_to_update_are_ok(additional_targets_to_update)
 
     @staticmethod
-    def assert_additional_targets_are_ok(additional_targets_to_update: List[str]):
+    def assert_additional_targets_to_update_are_ok(additional_targets_to_update: List[str]):
 
         if type(additional_targets_to_update) is not list:
             error_msg = ProgramConfigChecker.error_message.format(
