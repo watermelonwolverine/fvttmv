@@ -10,41 +10,48 @@ class DbFilesIteratorTest(unittest.TestCase):
     def setUp(self) -> None:
         Setup.setup_working_environment()
 
-    def test_iterate_through_directory(self) -> None:
+    def test_iterate_through_world_dir(self) -> None:
 
-        print("test_iterate_through_directory")
+        print("test_iterate_through_world_dir")
 
         expected = [AbsPaths.contains_1_db,
                     AbsPaths.contains_2_db]
 
         result = []
 
-        for db_file in DbFilesIterator.iterate_through_directory(AbsPaths.world1):
+        for db_file in DbFilesIterator.iterate_through_world_dir(AbsPaths.world1):
             result.append(db_file)
 
         self.assertEqual(expected, result)
 
-    def test_iterate_through_directory_exceptions(self):
+    def test_iterate_through_world_dir_exception1(self):
 
-        print("test_iterate_through_directory_exceptions")
+        print("test_iterate_through_world_dir_exception1")
 
         try:
-            for _ in DbFilesIterator.iterate_through_directory("./foundrydata_copy"):
+            for _ in DbFilesIterator.iterate_through_all_worlds("./foundrydata_copy"):
                 self.fail()
         except FvttmvException:
             pass
 
+    def test_iterate_through_world_dir_exception2(self):
+
+        print("test_iterate_through_world_dir_exception2")
+
         try:
-            for _ in DbFilesIterator.iterate_through_directory(AbsPaths.contains_1_db):
+            for _ in DbFilesIterator.iterate_through_all_worlds(AbsPaths.contains_1_db):
                 self.fail()
         except FvttmvException:
             pass
 
+    def test_iterate_though_world_dir_exception3(self):
+
+        print("test_iterate_though_world_dir_exception3")
         path_that_does_not_exist = os.path.join(AbsPaths.Data,
                                                 "does_not_exist")
 
         try:
-            for _ in DbFilesIterator.iterate_through_directory(path_that_does_not_exist):
+            for _ in DbFilesIterator.iterate_through_world_dir(path_that_does_not_exist):
                 self.fail()
         except FvttmvException:
             pass

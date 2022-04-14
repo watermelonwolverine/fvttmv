@@ -1,3 +1,4 @@
+from fvttmv import db_file_encoding
 from fvttmv.search.__references_searcher_string import ReferencesSearcherString
 
 
@@ -11,7 +12,7 @@ class ReferencesSearcherFile:
                                       reference: str) -> bool:
         data: str
 
-        with open(path_to_db_file, "rt", encoding="utf-8", newline='') as fin:
+        with open(path_to_db_file, "rt", encoding=db_file_encoding, newline='') as fin:
             data = fin.read()
 
         return ReferencesSearcherString.does_contain_references(data,

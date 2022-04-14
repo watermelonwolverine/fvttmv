@@ -2,6 +2,7 @@ import json
 import logging
 import os.path
 
+from fvttmv import config_file_encoding
 from fvttmv.__checks import check_path_to_foundry_data
 from fvttmv.exceptions import FvttmvException
 
@@ -46,7 +47,7 @@ class ConfigFileReader:
 
         # noinspection PyBroadException
         try:
-            with open(path_to_config_file, encoding="utf-8") as config_file:
+            with open(path_to_config_file, encoding=config_file_encoding) as config_file:
                 config_dict = json.load(config_file)
         except BaseException as ex:
             raise FvttmvException("Exception while reading config file: " + str(ex))

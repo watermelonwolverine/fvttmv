@@ -2,6 +2,10 @@ import os
 import shutil
 import urllib.parse
 
+from fvttmv import utf_8
+
+ansi = "ANSI"
+
 
 def ref(*args):
     result = "/".join(args)
@@ -32,10 +36,12 @@ class C:
     world_json = "world.json"
     not_a_world1 = "not_a_world1"
     not_a_world2 = "not_a_world2"
+    thumbs_db = "thumbs.db"
     contains_1_and_2_db = "contains_1_and_2.db"
     contains_1_db = "contains_1.db"
     contains_2_db = "contains_2.db"
     contains_none_db = "contains_none.db"
+    should_not_be_touched_db = "should_not_be_touched.db"
     not_a_db_txt = "not_a_db.txt"
     sub_folder = "sub_folder"
     error_log = "error.log"
@@ -58,10 +64,13 @@ class RelPaths:
     sub_folder = os.path.join(images, C.sub_folder)
     file3_png = os.path.join(sub_folder, C.file3_png)
 
+    should_not_be_touched_db = os.path.join(world1, C.should_not_be_touched_db)
+    thumbs_db = os.path.join(world1, C.data, C.thumbs_db)
     contains_1_db = os.path.join(world1, C.data, C.contains_1_db)
     contains_2_db = os.path.join(world1, C.packs, C.contains_2_db)
     contains_1_and_2_db = os.path.join(world2, C.data, C.contains_1_and_2_db)
     contains_none_db = os.path.join(world2, C.packs, C.contains_none_db)
+
     not_a_db_txt = os.path.join(world2, C.data, C.not_a_db_txt)
 
 
@@ -83,6 +92,9 @@ class AbsPaths:
     sub_folder = os.path.join(Data, RelPaths.sub_folder)
     file3_png = os.path.join(Data, RelPaths.file3_png)
 
+    # this should be ignores, even though it is a db file
+    should_not_be_touched_db = os.path.join(Data, RelPaths.should_not_be_touched_db)
+    thumbs_db = os.path.join(Data, RelPaths.thumbs_db)
     contains_1_db = os.path.join(Data, RelPaths.contains_1_db)
     contains_2_db = os.path.join(Data, RelPaths.contains_2_db)
     contains_1_and_2_db = os.path.join(Data, RelPaths.contains_1_and_2_db)
@@ -128,6 +140,10 @@ class DataStrings:
 
     contains_none = base_data_str.format("bla/bla/bla")
 
+    should_not_be_touched_db = contains_1_and_2_original
+
+    thumbs_db = contains_1_and_2_original
+
 
 class FileContents:
     file_1 = "blablabla"
@@ -169,43 +185,49 @@ class Setup:
 
     @staticmethod
     def _create_db_files():
-        with open(AbsPaths.contains_2_db, "wt", encoding="utf-8", newline='') as fout:
+        with open(AbsPaths.contains_2_db, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.contains_2_original)
 
-        with open(AbsPaths.contains_1_db, "wt", encoding="utf-8", newline='') as fout:
+        with open(AbsPaths.contains_1_db, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.contains_1_original)
 
-        with open(AbsPaths.contains_1_and_2_db, "wt", encoding="utf-8", newline='') as fout:
+        with open(AbsPaths.contains_1_and_2_db, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.contains_1_and_2_original)
 
-        with open(AbsPaths.contains_none_db, "wt", encoding="utf-8", newline='') as fout:
+        with open(AbsPaths.contains_none_db, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.contains_none)
 
-        with open(AbsPaths.not_a_db_txt, "wt", encoding="utf-8", newline='') as fout:
+        with open(AbsPaths.not_a_db_txt, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.not_a_db)
+
+        with open(AbsPaths.thumbs_db, "wt", encoding=utf_8, newline='') as fout:
+            fout.write(DataStrings.thumbs_db)
+
+        with open(AbsPaths.should_not_be_touched_db, "wt", encoding=utf_8, newline='') as fout:
+            fout.write(DataStrings.should_not_be_touched_db)
 
     @staticmethod
     def _create_png_files():
-        with open(AbsPaths.file1_png, "wt", encoding='UTF-8', newline='') as fout:
+        with open(AbsPaths.file1_png, "wt", encoding=utf_8, newline='') as fout:
             fout.write(FileContents.file_1)
 
-        with open(AbsPaths.file2_png, "wt", encoding='UTF-8', newline='') as fout:
+        with open(AbsPaths.file2_png, "wt", encoding=utf_8, newline='') as fout:
             fout.write(FileContents.file_2)
 
-        with open(AbsPaths.file3_png, "wt", encoding='UTF-8', newline='') as fout:
+        with open(AbsPaths.file3_png, "wt", encoding=utf_8, newline='') as fout:
             fout.write(FileContents.file_3)
 
     @staticmethod
     def _create_world_json_files():
         path_to_world1_json = os.path.join(AbsPaths.world1, C.world_json)
 
-        with open(path_to_world1_json, "wt", encoding="utf-8", newline='') as fout:
+        with open(path_to_world1_json, "wt", encoding=utf_8, newline='') as fout:
             fout.write("")
 
         path_to_world_2_json = os.path.join(AbsPaths.world2, C.world_json)
-        with open(path_to_world_2_json, "wt", encoding="utf-8", newline='') as fout:
+        with open(path_to_world_2_json, "wt", encoding=utf_8, newline='') as fout:
             fout.write("")
 
         path_to_not_a_world2_json = os.path.join(AbsPaths.worlds, C.not_a_world2, C.world_json)
-        with open(path_to_not_a_world2_json, "wt", encoding="utf-8", newline='') as fout:
+        with open(path_to_not_a_world2_json, "wt", encoding=utf_8, newline='') as fout:
             fout.write("")

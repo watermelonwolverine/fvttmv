@@ -1,50 +1,51 @@
 import os
-from os import path
-from typing import List
 
-from fvttmv.exceptions import FvttmvException
+from fvttmv.exceptions import FvttmvInternalException
+from fvttmv.path_tools import PathTools
 from fvttmv.wolds_finder import WorldsFinder
+
+dirs_to_look_for_db_file = ["data", "packs"]
+
+# thumbs.db = old windows xp thumbnail cache.
+db_files_to_ignore = ["thumbs.db"]
 
 
 class DbFilesIterator:
     """
-    Iterates over all the *.db files in a given directory
+    Iterates over all the foundry VTT *.db files in a given world directory
     """
 
     @staticmethod
-    def iterate_through_directory(path_to_directory: str):
+    def iterate_through_world_dir(abs_path_to_world_dir: str):
 
-        if not path.isdir(path_to_directory) \
-                or not path.isabs(path_to_directory):
-            raise FvttmvException("{0} is not absolute or not a directory".format(path_to_directory))
+        PathTools.assert_path_format_is_ok(abs_path_to_world_dir)
 
-        directory_contents = os.listdir(path_to_directory)
+        if not os.path.isdir(abs_path_to_world_dir):
+            raise FvttmvInternalException("{0} is not a directory.".format(abs_path_to_world_dir))
 
-        for element in directory_contents:
+        for directory in dirs_to_look_for_db_file:
+            path_to_dir = os.path.join(abs_path_to_world_dir, directory)
+            for element in os.listdir(path_to_dir):
+                path_to_element = os.path.join(path_to_dir, element)
 
-            path_to_element = path.join(path_to_directory, element)
+                if not os.path.isfile(path_to_element):
+                    continue
 
-            if path.isdir(path_to_element):
+                if element in db_files_to_ignore:
+                    continue
 
-                for db_file in DbFilesIterator.iterate_through_directory(path_to_element):
-                    yield db_file
-
-            elif element.endswith(".db"):
-                yield path_to_element
+                if element.endswith(".db"):
+                    yield path_to_element
 
     @staticmethod
-    def iterate_through_all_directories(paths_to_directory: List[str]):
+    def iterate_through_all_worlds(abs_path_to_foundry_data: str):
 
-        for path_to_directory in paths_to_directory:
-            for db_file in DbFilesIterator.iterate_through_directory(path_to_directory):
+        PathTools.assert_path_format_is_ok(abs_path_to_foundry_data)
+
+        worlds_finder = WorldsFinder(abs_path_to_foundry_data)
+
+        world_dirs = worlds_finder.get_paths_to_worlds()
+
+        for path_to_world_dir in world_dirs:
+            for db_file in DbFilesIterator.iterate_through_world_dir(path_to_world_dir):
                 yield db_file
-
-    @staticmethod
-    def iterate_through_all_worlds(absolute_path_to_foundrydata: str):
-
-        worlds_finder = WorldsFinder(absolute_path_to_foundrydata)
-
-        worlds = worlds_finder.get_paths_to_worlds()
-
-        for db_file in DbFilesIterator.iterate_through_all_directories(worlds):
-            yield db_file
