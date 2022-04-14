@@ -45,7 +45,7 @@ class Mover:
 
         self.pre_move_checker = PreMoveChecker(self.path_tools)
 
-        ProgramConfigChecker.check_config(run_config)
+        ProgramConfigChecker.assert_config_is_ok(run_config)
 
     def move(self,
              src_list: List[str],

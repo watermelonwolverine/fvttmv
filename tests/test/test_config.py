@@ -14,27 +14,27 @@ class ProgramConfigImplTest(unittest.TestCase):
 
         # not absolute
         try:
-            ProgramConfigImpl(C.foundrydata)
+            ProgramConfigImpl(C.foundrydata, [])
             self.fail()
         except FvttmvException:
             pass
 
         # not normalized
         try:
-            ProgramConfigImpl(os.path.join(AbsPaths.Data, "..", C.Data))
+            ProgramConfigImpl(os.path.join(AbsPaths.Data, "..", C.Data), [])
             self.fail()
         except FvttmvException:
             pass
 
         # not a directory
         try:
-            ProgramConfigImpl(os.path.abspath(C.Data))
+            ProgramConfigImpl(os.path.abspath(C.Data), [])
             self.fail()
         except FvttmvException:
             pass
 
         try:
-            ProgramConfigImpl(os.path.abspath("does_not_exist"))
+            ProgramConfigImpl(os.path.abspath("does_not_exist"), [])
             self.fail()
         except FvttmvException:
             pass

@@ -2,8 +2,7 @@ import os
 from os import path
 from typing import List
 
-from fvttmv.__checks import check_path_to_foundry_data
-from fvttmv.exceptions import FvttmvException
+from fvttmv.config import ProgramConfigChecker
 
 
 class WorldsFinder:
@@ -18,8 +17,7 @@ class WorldsFinder:
     def __init__(self,
                  abs_path_to_foundry_data: str):
 
-        if not check_path_to_foundry_data(abs_path_to_foundry_data):
-            raise FvttmvException()
+        ProgramConfigChecker.assert_path_to_foundry_data_is_ok(abs_path_to_foundry_data)
 
         self.__abs_path_to_foundry_data = abs_path_to_foundry_data
 

@@ -140,7 +140,7 @@ class PathToolsTest(unittest.TestCase):
         print("test_contains_illegal_character")
 
         for char in ["*", "\"", ":", "|"]:
-            result = PathTools.contains_illegal_characters(AbsPaths.Data + char)
+            result = PathTools.is_accepted_by_os(AbsPaths.Data + char)
 
             self.assertEqual(result, True)
 

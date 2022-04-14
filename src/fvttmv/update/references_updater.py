@@ -1,5 +1,4 @@
-from fvttmv.__checks import check_path_to_foundry_data
-from fvttmv.exceptions import FvttmvException
+from fvttmv.config import ProgramConfigChecker
 from fvttmv.iterators.db_files_iterator import DbFilesIterator
 from fvttmv.update.__references_updater_file import ReferencesUpdaterFile
 
@@ -9,16 +8,13 @@ class ReferencesUpdater:
 
     def __init__(self,
                  abs_path_to_foundry_data: str):
-
-        if not check_path_to_foundry_data(abs_path_to_foundry_data):
-            raise FvttmvException("abs_path_to_foundry_data is not ok")
+        ProgramConfigChecker.assert_path_to_foundry_data_is_ok(abs_path_to_foundry_data)
 
         self.__abs_path_to_foundry_data = abs_path_to_foundry_data
 
     def replace_references(self,
                            old_reference: str,
                            new_reference: str):
-
         self._do_replace_references(self.__abs_path_to_foundry_data,
                                     old_reference,
                                     new_reference)

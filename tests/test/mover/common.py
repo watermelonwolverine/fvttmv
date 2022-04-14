@@ -168,7 +168,7 @@ class MoverTestBase(unittest.TestCase):
                            self.reference_reference_confirm_mock)
 
     def __instantiate_configs(self):
-        self.program_config = ProgramConfigImpl(AbsPaths.Data)
+        self.program_config = ProgramConfigImpl(AbsPaths.Data, [])
         self.run_config = RunConfig(self.program_config)
 
     def __instantiate_mocks(self):

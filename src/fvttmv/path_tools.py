@@ -78,7 +78,7 @@ class PathTools:
             return True
 
     @staticmethod
-    def contains_illegal_characters(path: str):
+    def is_accepted_by_os(path: str):
 
         try:
             os.stat(path)
@@ -91,11 +91,14 @@ class PathTools:
 
     @staticmethod
     def assert_path_format_is_ok(path: str):
-        if not os.path.isabs(path) \
-                or not PathTools.is_normalized_path(path) \
-                or PathTools.ends_with_separator(path) \
-                or PathTools.contains_illegal_characters(path):
-            raise FvttmvInternalException("{0} is not ok".format(path))
+        if not os.path.isabs(path):
+            raise FvttmvInternalException("{0} is not absolute".format(path))
+        if not PathTools.is_normalized_path(path):
+            raise FvttmvInternalException("{0} is not normalized".format(path))
+        if PathTools.ends_with_separator(path):
+            raise FvttmvInternalException("{0} ends with separator".format(path))
+        if PathTools.is_accepted_by_os(path):
+            raise FvttmvInternalException("{0} is not accepted by the OS".format(path))
 
     @staticmethod
     def filesystem_is_case_sensitive():
