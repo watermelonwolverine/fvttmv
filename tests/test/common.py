@@ -20,20 +20,38 @@ class C:
     """
 
     foundrydata = "foundrydata"
-    assets = "assets (with space)"
-    worlds = "worlds"
+
+    #
+    # foundrydata contents
+    #
     Data = "Data"
     Logs = "Logs"
-    world1 = "world1"
-    world2 = "world2"
-    packs = "packs"
-    scenes = "scenes"
-    data = "data"
+
+    #
+    # Data contents
+    #
+    assets = "assets (with space)"
+    worlds = "worlds"
+    modules = "modules"
+
+    #
+    # assets contents
+    #
     file1_png = "file1.png"
     file2_png = "file2 (with space).png"
     file3_png = "file3.png"
     images = "images"
     images2 = "images2"
+    sub_folder = "sub_folder"
+
+    #
+    # worlds contents
+    #
+    world1 = "world1"
+    world2 = "world2"
+    packs = "packs"
+    scenes = "scenes"
+    data = "data"
     world_json = "world.json"
     not_a_world1 = "not_a_world1"
     not_a_world2 = "not_a_world2"
@@ -44,19 +62,23 @@ class C:
     contains_none_db = "contains_none.db"
     should_not_be_touched_db = "should_not_be_touched.db"
     not_a_db_txt = "not_a_db.txt"
-    sub_folder = "sub_folder"
+
+    # logs contents
     error_log = "error.log"
 
 
+# relative to Data folder, NOT to working dir
 class RelPaths:
+    #
+    # Data content
+    #
     assets = C.assets
+    modules = C.modules
     worlds = C.worlds
 
-    world1 = os.path.join(worlds, C.world1)
-    world2 = os.path.join(worlds, C.world2)
-    not_a_world1 = os.path.join(worlds, C.not_a_world1)
-    not_a_world2 = os.path.join(worlds, C.not_a_world2)
-
+    #
+    # assets content
+    #
     images = os.path.join(assets, C.images)
 
     file1_png = os.path.join(images, C.file1_png)
@@ -64,6 +86,14 @@ class RelPaths:
 
     sub_folder = os.path.join(images, C.sub_folder)
     file3_png = os.path.join(sub_folder, C.file3_png)
+
+    #
+    # worlds content
+    #
+    world1 = os.path.join(worlds, C.world1)
+    world2 = os.path.join(worlds, C.world2)
+    not_a_world1 = os.path.join(worlds, C.not_a_world1)
+    not_a_world2 = os.path.join(worlds, C.not_a_world2)
 
     should_not_be_touched_db = os.path.join(world1, C.should_not_be_touched_db)
     thumbs_db = os.path.join(world1, C.data, C.thumbs_db)
@@ -77,16 +107,24 @@ class RelPaths:
 
 class AbsPaths:
     foundrydata = os.path.abspath(C.foundrydata)
+
+    #
+    # foundrydata contents
+    #
     Data = os.path.join(foundrydata, C.Data)
+    Logs = os.path.join(foundrydata, C.Logs)
 
+    #
+    # Data contents
+    #
     assets = os.path.join(Data, RelPaths.assets)
+    modules = os.path.join(Data, RelPaths.modules)
     worlds = os.path.join(Data, RelPaths.worlds)
-    images = os.path.join(Data, RelPaths.images)
 
-    world1 = os.path.join(Data, RelPaths.world1)
-    world2 = os.path.join(Data, RelPaths.world2)
-    not_a_world1 = os.path.join(Data, RelPaths.not_a_world1)
-    not_a_world2 = os.path.join(Data, RelPaths.not_a_world2)
+    #
+    # assets content
+    #
+    images = os.path.join(Data, RelPaths.images)
 
     file1_png = os.path.join(Data, RelPaths.file1_png)
     file2_png = os.path.join(Data, RelPaths.file2_png)
@@ -94,7 +132,15 @@ class AbsPaths:
     sub_folder = os.path.join(Data, RelPaths.sub_folder)
     file3_png = os.path.join(Data, RelPaths.file3_png)
 
-    # this should be ignores, even though it is a db file
+    #
+    # worlds content
+    #
+    world1 = os.path.join(Data, RelPaths.world1)
+    world2 = os.path.join(Data, RelPaths.world2)
+    not_a_world1 = os.path.join(Data, RelPaths.not_a_world1)
+    not_a_world2 = os.path.join(Data, RelPaths.not_a_world2)
+
+    # this should be ignored, even though it is a db file
     should_not_be_touched_db = os.path.join(Data, RelPaths.should_not_be_touched_db)
     thumbs_db = os.path.join(Data, RelPaths.thumbs_db)
     contains_1_db = os.path.join(Data, RelPaths.contains_1_db)
@@ -166,12 +212,12 @@ class Setup:
 
     @staticmethod
     def _setup_folder_structure():
-        os.makedirs(os.path.join(AbsPaths.Data, C.Logs))
-        os.makedirs(os.path.join(AbsPaths.images, C.sub_folder))
-        os.makedirs(os.path.join(AbsPaths.worlds, C.not_a_world1, C.data))
-        os.makedirs(os.path.join(AbsPaths.worlds, C.not_a_world1, C.packs))
-        os.makedirs(os.path.join(AbsPaths.worlds, C.not_a_world1, C.scenes))
-        os.makedirs(os.path.join(AbsPaths.worlds, C.not_a_world2))
+        os.makedirs(AbsPaths.Logs)
+        os.makedirs(os.path.join(AbsPaths.sub_folder))
+        os.makedirs(os.path.join(AbsPaths.not_a_world1, C.data))
+        os.makedirs(os.path.join(AbsPaths.not_a_world1, C.packs))
+        os.makedirs(os.path.join(AbsPaths.not_a_world1, C.scenes))
+        os.makedirs(os.path.join(AbsPaths.not_a_world2))
         os.makedirs(os.path.join(AbsPaths.world1, C.data))
         os.makedirs(os.path.join(AbsPaths.world1, C.packs))
         os.makedirs(os.path.join(AbsPaths.world1, C.scenes))
@@ -236,14 +282,12 @@ class Setup:
 
 
 # For testing in a real environment
-
 class TestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         Setup.setup_working_environment()
 
 # For testing in a virtual environment
-
 # class TestCase(fake_filesystem_unittest.TestCase):
 #
 #     def setUp(self) -> None:
