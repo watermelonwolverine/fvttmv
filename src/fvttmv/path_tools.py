@@ -83,11 +83,11 @@ class PathTools:
         try:
             os.stat(path)
         except FileNotFoundError:
-            return False
-        except OSError:
             return True
+        except OSError:
+            return False
 
-        return False
+        return True
 
     @staticmethod
     def assert_path_format_is_ok(path: str):
@@ -97,7 +97,7 @@ class PathTools:
             raise FvttmvInternalException("{0} is not normalized".format(path))
         if PathTools.ends_with_separator(path):
             raise FvttmvInternalException("{0} ends with separator".format(path))
-        if PathTools.is_accepted_by_os(path):
+        if not PathTools.is_accepted_by_os(path):
             raise FvttmvInternalException("{0} is not accepted by the OS".format(path))
 
     @staticmethod

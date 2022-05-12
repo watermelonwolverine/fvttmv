@@ -132,7 +132,8 @@ class DirectoryMover:
         PathTools.assert_path_format_is_ok(abs_path_to_src_dir)
         PathTools.assert_path_format_is_ok(abs_path_to_dst_dir)
 
-        src_contents = os.listdir(abs_path_to_src_dir)
+        # os.listdir is not always sorted the same way. For testing purposes and reproduction purposes it should be though
+        src_contents = sorted(os.listdir(abs_path_to_src_dir))
 
         for file_or_directory_name in src_contents:
             abs_path_to_sub_src = os.path.join(abs_path_to_src_dir,

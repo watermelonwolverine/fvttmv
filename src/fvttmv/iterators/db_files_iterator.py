@@ -31,7 +31,8 @@ class DbFilesIterator:
 
         PathTools.assert_path_format_is_ok(abs_path_to_dir)
 
-        for element in os.listdir(abs_path_to_dir):
+        # os.listdir is not always sorted the same way. For testing purposes and reproduction purposes it should be though
+        for element in sorted(os.listdir(abs_path_to_dir)):
             path_to_element = os.path.join(abs_path_to_dir, element)
 
             if not os.path.isfile(path_to_element):

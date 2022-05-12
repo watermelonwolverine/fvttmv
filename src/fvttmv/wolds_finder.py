@@ -30,7 +30,8 @@ class WorldsFinder:
         path_to_worlds_directory = path.join(self.__abs_path_to_foundry_data,
                                              "worlds")
 
-        worlds_directory_content = os.listdir(path_to_worlds_directory)
+        # os.listdir is not always sorted the same way. For testing purposes and reproduction purposes it should be though
+        worlds_directory_content = sorted(os.listdir(path_to_worlds_directory))
 
         result = []
 

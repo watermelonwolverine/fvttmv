@@ -1,8 +1,7 @@
 import os
 import shutil
+import unittest
 import urllib.parse
-
-from pyfakefs import fake_filesystem_unittest
 
 from fvttmv import utf_8
 
@@ -77,7 +76,8 @@ class RelPaths:
 
 
 class AbsPaths:
-    Data = os.path.join(os.path.abspath(C.foundrydata), C.Data)
+    foundrydata = os.path.abspath(C.foundrydata)
+    Data = os.path.join(foundrydata, C.Data)
 
     assets = os.path.join(Data, RelPaths.assets)
     worlds = os.path.join(Data, RelPaths.worlds)
@@ -235,8 +235,17 @@ class Setup:
             fout.write("")
 
 
-class TestCase(fake_filesystem_unittest.TestCase):
+# For testing in a real environment
+
+class TestCase(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.setUpPyfakefs()
         Setup.setup_working_environment()
+
+# For testing in a virtual environment
+
+# class TestCase(fake_filesystem_unittest.TestCase):
+#
+#     def setUp(self) -> None:
+#         self.setUpPyfakefs()
+#         Setup.setup_working_environment()

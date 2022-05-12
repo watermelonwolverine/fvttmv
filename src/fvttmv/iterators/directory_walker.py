@@ -30,7 +30,7 @@ class DirectoryWalker:
                 or not os.path.isabs(abs_path_to_directory):
             raise FvttmvException()
 
-        directory_content = os.listdir(abs_path_to_directory)
+        directory_content = sorted(os.listdir(abs_path_to_directory))
 
         for element in directory_content:
 

@@ -1,4 +1,5 @@
 import os
+import unittest
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.path_tools import PathTools
@@ -135,14 +136,6 @@ class PathToolsTest(TestCase):
 
         self.assertEqual(result, True)
 
-    def test_contains_illegal_character(self):
-        print("test_contains_illegal_character")
-
-        for char in ["*", "\"", ":", "|"]:
-            result = PathTools.is_accepted_by_os(AbsPaths.Data + char)
-
-            self.assertEqual(result, True)
-
     def test_get_correctly_case_path1(self):
         print("test_get_correctly_case_path1")
 
@@ -208,3 +201,16 @@ class PathToolsTest(TestCase):
         result = PathTools.get_correctly_cased_path(dir_path.upper())
 
         self.assertEqual(dir_path, result)
+
+
+class PathToolsTestNonFake(unittest.TestCase):
+
+    def test_contains_illegal_character(self):
+        print("test_contains_illegal_character")
+
+        # this test doesn't work in the pyfakefs and has to be done outside
+
+        for char in ["*", "\"", ":", "|"]:
+            result = PathTools.is_accepted_by_os(AbsPaths.Data + char)
+
+            self.assertEqual(result, False)

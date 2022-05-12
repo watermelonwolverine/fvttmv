@@ -228,9 +228,9 @@ class MoverTestCaseBase(TestCase):
                      new_element: str):
         index = self.expected_directory_tree.index(element_to_replace)
         self.expected_directory_tree[index] = new_element
-        self.expected_directory_tree.sort(key=str.lower)
+        self.expected_directory_tree.sort()
 
     def add_path(self,
                  element_to_add: str):
         self.expected_directory_tree.append(element_to_add)
-        self.expected_directory_tree.sort(key=str.lower)
+        self.expected_directory_tree.sort()
