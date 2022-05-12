@@ -149,12 +149,13 @@ class ProgramConfigChecker:
     @staticmethod
     def __assert_additional_targets_are_ok(program_config: ProgramConfig):
 
-        additional_targets_to_update = program_config.get_additional_targets_to_update()
-
-        ProgramConfigChecker.assert_additional_targets_to_update_are_ok(additional_targets_to_update)
+        ProgramConfigChecker.assert_additional_targets_to_update_are_ok(
+            program_config.get_absolute_path_to_foundry_data(),
+            program_config.get_additional_targets_to_update())
 
     @staticmethod
-    def assert_additional_targets_to_update_are_ok(additional_targets_to_update: List[str]):
+    def assert_additional_targets_to_update_are_ok(abs_path_to_foundry_data: str,
+                                                   additional_targets_to_update: List[str]):
 
         if type(additional_targets_to_update) is not list:
             error_msg = ProgramConfigChecker.error_message.format(
@@ -164,11 +165,13 @@ class ProgramConfigChecker:
             raise FvttmvException(error_msg)
 
         for additional_target in additional_targets_to_update:
-            if not ProgramConfigChecker.assert_additional_target_is_ok(additional_target):
-                ProgramConfigChecker.assert_additional_target_is_ok(additional_target)
+            ProgramConfigChecker.assert_additional_target_is_ok(
+                abs_path_to_foundry_data,
+                additional_target)
 
     @staticmethod
-    def assert_additional_target_is_ok(abs_path_to_target: str) -> None:
+    def assert_additional_target_is_ok(abs_path_to_foundry_data: str,
+                                       abs_path_to_target: str) -> None:
 
         if type(abs_path_to_target) is not str:
             error_msg = ProgramConfigChecker.error_message.format(
@@ -187,4 +190,12 @@ class ProgramConfigChecker:
             error_msg = ProgramConfigChecker.error_message.format(
                 Keys.additional_targets_to_update,
                 "{0} is neither a file nor a directory.".format(abs_path_to_target))
+            raise FvttmvException(error_msg)
+
+        path_tools = PathTools(abs_path_to_foundry_data)
+
+        if not path_tools.is_in_foundry_data(abs_path_to_target):
+            error_msg = ProgramConfigChecker.error_message.format(
+                Keys.additional_targets_to_update,
+                "{0} is neither not inside the foundry Data directory.".format(abs_path_to_target))
             raise FvttmvException(error_msg)

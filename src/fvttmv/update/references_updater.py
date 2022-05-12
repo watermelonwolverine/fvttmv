@@ -14,7 +14,8 @@ class ReferencesUpdater:
                  abs_path_to_foundry_data: str,
                  additional_targets_to_update: List[str]):
         ProgramConfigChecker.assert_path_to_foundry_data_is_ok(abs_path_to_foundry_data)
-        ProgramConfigChecker.assert_additional_targets_to_update_are_ok(additional_targets_to_update)
+        ProgramConfigChecker.assert_additional_targets_to_update_are_ok(abs_path_to_foundry_data,
+                                                                        additional_targets_to_update)
 
         self.__abs_path_to_foundry_data = abs_path_to_foundry_data
         self.__additional_targets_to_update = additional_targets_to_update
