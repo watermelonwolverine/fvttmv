@@ -1,11 +1,10 @@
-import unittest
-
 from fvttmv.exceptions import FvttmvException
 from fvttmv.reference_tools import ReferenceTools
 from fvttmv.search.__references_searcher_string import ReferencesSearcherString
+from test.common import TestCase
 
 
-class ReferencesSearcherStringTest(unittest.TestCase):
+class ReferencesSearcherStringTest(TestCase):
     json_base_str = "\"img\":\"{0}\""
     html_base_str = "<img src=\\\"{0}\\\">"
 

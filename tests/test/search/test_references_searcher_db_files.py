@@ -1,13 +1,8 @@
-import unittest
-
 from fvttmv.search.__references_searcher_db_files import ReferencesSearcherDbFiles
-from test.common import *
+from test.common import TestCase, AbsPaths, References
 
 
-class ReferencesSearcherDbFilesTest(unittest.TestCase):
-
-    def setUp(self) -> None:
-        Setup.setup_working_environment()
+class ReferencesSearcherDbFilesTest(TestCase):
 
     def test_search_for_references_in_db_files1(self):
         print("test_search_for_references_in_db_files1")

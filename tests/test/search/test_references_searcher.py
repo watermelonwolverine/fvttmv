@@ -1,10 +1,10 @@
-import unittest
+import os
 from io import TextIOWrapper
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.path_tools import PathTools
 from fvttmv.search.references_searcher import ReferencesSearcher
-from test.common import *
+from test.common import TestCase, AbsPaths, C, References, RelPaths
 
 
 class TextIOWrapperMock(TextIOWrapper):
@@ -18,11 +18,11 @@ class TextIOWrapperMock(TextIOWrapper):
         self.outputs.append(string)
 
 
-class ReferencesSearcherTest(unittest.TestCase):
+class ReferencesSearcherTest(TestCase):
     _path_tools: PathTools
 
     def setUp(self) -> None:
-        Setup.setup_working_environment()
+        super().setUp()
         self._path_tools = PathTools(AbsPaths.Data)
 
     def test_search_exceptions(self):

@@ -2,13 +2,13 @@ import os
 
 from fvttmv.exceptions import FvttmvException
 from test.common import AbsPaths, References, C, ref
-from test.mover.common import MoverTestBase, ReplaceReferenceCall
+from test.mover.common import MoverTestCaseBase, ReplaceReferenceCall
 
 
-class MoverTestNoMove(MoverTestBase):
+class MoverTestCaseNoMove(MoverTestCaseBase):
 
     def setUp(self) -> None:
-        super(MoverTestNoMove, self).setUp()
+        super().setUp()
         self.run_config.no_move = True
 
     def test_rename_file_no_move(self):

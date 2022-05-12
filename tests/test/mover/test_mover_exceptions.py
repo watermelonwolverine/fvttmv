@@ -3,10 +3,10 @@ import sys
 
 from fvttmv.exceptions import FvttmvException
 from test.common import AbsPaths, C
-from test.mover.common import MoverTestBase
+from test.mover.common import MoverTestCaseBase
 
 
-class MoverTestExceptions(MoverTestBase):
+class MoverTestCaseExceptions(MoverTestCaseBase):
 
     def test_move_outside_Data_dir(self):
         print("test_move_outside_Data_dir")

@@ -1,13 +1,8 @@
-import unittest
-
 from fvttmv.update.__references_updater_file import ReferencesUpdaterFile
-from test.common import Setup, References, AbsPaths, DataStrings
+from test.common import References, AbsPaths, DataStrings, TestCase
 
 
-class ReferencesUpdaterFileTest(unittest.TestCase):
-
-    def setUp(self) -> None:
-        Setup.setup_working_environment()
+class ReferencesUpdaterFileTest(TestCase):
 
     def test_replace_references_in_file1(self):
         print("test_replace_references_in_file1")

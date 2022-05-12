@@ -1,13 +1,8 @@
-import unittest
-
 from fvttmv.search.__references_searcher_file import ReferencesSearcherFile
-from test.common import *
+from test.common import TestCase, AbsPaths, References
 
 
-class ReferencesSearcherFileTest(unittest.TestCase):
-
-    def setUp(self) -> None:
-        Setup.setup_working_environment()
+class ReferencesSearcherFileTest(TestCase):
 
     def test_search_for_references_in_file(self):
         print("test_search_for_references_in_file")

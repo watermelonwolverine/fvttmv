@@ -3,10 +3,10 @@ import shutil
 import sys
 
 from test.common import AbsPaths, References, C, ref, FileContents
-from test.mover.common import MoverTestBase, ReplaceReferenceCall, ConfirmOverrideCall
+from test.mover.common import MoverTestCaseBase, ReplaceReferenceCall, ConfirmOverrideCall
 
 
-class MoverTest(MoverTestBase):
+class MoverTestCase(MoverTestCaseBase):
 
     def test_rename_file(self):
         print("test_rename_file")

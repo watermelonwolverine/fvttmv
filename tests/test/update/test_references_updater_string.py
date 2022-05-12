@@ -1,13 +1,11 @@
-import unittest
-
 from fvttmv.exceptions import FvttmvException
 from fvttmv.reference_tools import ReferenceTools
 from fvttmv.update.__references_updater_string import ReferencesUpdaterString
 from fvttmv.update.__update_context import UpdateContext
-from test.common import DataStrings, References
+from test.common import DataStrings, References, TestCase
 
 
-class ReferencesUpdaterTextTest(unittest.TestCase):
+class ReferencesUpdaterTextTest(TestCase):
     original_reference = References.file1_original
     replacement_reference = References.file1_replacement
 

@@ -1,14 +1,11 @@
-import unittest
+import os
 
 from fvttmv.config import Keys, ProgramConfig, ProgramConfigImpl, ConfigFileReader
 from fvttmv.exceptions import FvttmvException
-from test.common import *
+from test.common import TestCase, AbsPaths, C
 
 
-class ProgramConfigImplTest(unittest.TestCase):
-
-    def setUp(self) -> None:
-        Setup.setup_working_environment()
+class ProgramConfigImplTest(TestCase):
 
     def test_constructor_exceptions(self):
 

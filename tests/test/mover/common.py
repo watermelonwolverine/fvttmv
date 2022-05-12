@@ -1,5 +1,4 @@
 import json
-import unittest
 from typing import List
 
 from fvttmv.config import RunConfig, ProgramConfig, ProgramConfigImpl
@@ -8,7 +7,7 @@ from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.move.reference_update_confirm import ReferenceUpdateConfirm
 from fvttmv.update.references_updater import ReferencesUpdater
-from test.common import AbsPaths, Setup
+from test.common import AbsPaths, TestCase
 
 
 class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):
@@ -137,7 +136,7 @@ class ReferenceUpdateConfirmMock(ReferenceUpdateConfirm):
         return self.default_answer
 
 
-class MoverTestBase(unittest.TestCase):
+class MoverTestCaseBase(TestCase):
     # config
     program_config: ProgramConfig
     run_config: RunConfig
@@ -155,7 +154,7 @@ class MoverTestBase(unittest.TestCase):
     mover: Mover
 
     def setUp(self) -> None:
-        Setup.setup_working_environment()
+        super().setUp()
 
         self.__instantiate_configs()
         self.__instantiate_mocks()

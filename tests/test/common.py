@@ -2,6 +2,8 @@ import os
 import shutil
 import urllib.parse
 
+from pyfakefs import fake_filesystem_unittest
+
 from fvttmv import utf_8
 
 ansi = "ANSI"
@@ -231,3 +233,10 @@ class Setup:
         path_to_not_a_world2_json = os.path.join(AbsPaths.worlds, C.not_a_world2, C.world_json)
         with open(path_to_not_a_world2_json, "wt", encoding=utf_8, newline='') as fout:
             fout.write("")
+
+
+class TestCase(fake_filesystem_unittest.TestCase):
+
+    def setUp(self) -> None:
+        self.setUpPyfakefs()
+        Setup.setup_working_environment()

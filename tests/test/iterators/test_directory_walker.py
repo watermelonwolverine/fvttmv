@@ -1,9 +1,9 @@
-import unittest
+import os
 from typing import List
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.iterators.directory_walker import DirectoryWalker, DirectoryWalkerCallback
-from test.common import *
+from test.common import TestCase, AbsPaths, C
 
 
 class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):
@@ -19,12 +19,12 @@ class DirectoryWalkerCallbackImpl(DirectoryWalkerCallback):
         self.result.append("out: " + abs_path_to_directory)
 
 
-class DirectoryWalkerTest(unittest.TestCase):
+class DirectoryWalkerTest(TestCase):
     directory_walker_callback_impl: DirectoryWalkerCallbackImpl
     directory_walker: DirectoryWalker
 
     def setUp(self) -> None:
-        Setup.setup_working_environment()
+        super().setUp()
         self.directory_walker_callback_impl = DirectoryWalkerCallbackImpl()
         self.directory_walker = DirectoryWalker(self.directory_walker_callback_impl)
 
@@ -52,8 +52,10 @@ class DirectoryWalkerTest(unittest.TestCase):
 
         print("test_walk_directory_exceptions")
 
+        path_that_is_not_absolute = C.foundrydata
+
         try:
-            self.directory_walker.walk_directory(C.foundrydata)
+            self.directory_walker.walk_directory(path_that_is_not_absolute)
             self.fail()
         except FvttmvException:
             pass

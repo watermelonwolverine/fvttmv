@@ -1,15 +1,15 @@
-import unittest
+import os
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.wolds_finder import WorldsFinder
-from test.common import *
+from test.common import TestCase, AbsPaths, C
 
 
-class WorldsFinderTest(unittest.TestCase):
+class WorldsFinderTest(TestCase):
     worlds_finder: WorldsFinder
 
     def setUp(self) -> None:
-        Setup.setup_working_environment()
+        super().setUp()
         self.worlds_finder = WorldsFinder(AbsPaths.Data)
 
     def test_constructor_exceptions(self):

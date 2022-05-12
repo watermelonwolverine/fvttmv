@@ -1,16 +1,15 @@
-import os.path
-import unittest
+import os
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.path_tools import PathTools
-from test.common import *
+from test.common import TestCase, AbsPaths, C, RelPaths
 
 
-class PathToolsTest(unittest.TestCase):
+class PathToolsTest(TestCase):
     path_tools: PathTools
 
     def setUp(self):
-        Setup.setup_working_environment()
+        super().setUp()
         self.path_tools = PathTools(AbsPaths.Data)
 
     def test_constructor_exceptions(self):

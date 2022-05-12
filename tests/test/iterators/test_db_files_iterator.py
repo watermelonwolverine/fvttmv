@@ -1,14 +1,11 @@
-import unittest
+import os
 
 from fvttmv.exceptions import FvttmvException
 from fvttmv.iterators.db_files_iterator import DbFilesIterator
-from test.common import *
+from test.common import TestCase, AbsPaths
 
 
-class DbFilesIteratorTest(unittest.TestCase):
-
-    def setUp(self) -> None:
-        Setup.setup_working_environment()
+class DbFilesIteratorTest(TestCase):
 
     def test_iterate_through_world_dir(self) -> None:
 

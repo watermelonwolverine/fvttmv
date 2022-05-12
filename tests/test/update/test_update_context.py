@@ -1,10 +1,8 @@
-import unittest
-
 from fvttmv.update.__update_context import UpdateContext
-from test.common import *
+from test.common import DataStrings, TestCase
 
 
-class UpdateContextTest(unittest.TestCase):
+class UpdateContextTest(TestCase):
 
     def test_init(self):
         print("test_init")

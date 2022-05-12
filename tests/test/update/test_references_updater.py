@@ -1,13 +1,8 @@
-import unittest
-
 from fvttmv.update.references_updater import ReferencesUpdater
-from test.common import *
+from test.common import TestCase, AbsPaths, References, DataStrings, utf_8
 
 
-class ReferencesUpdaterTest(unittest.TestCase):
-
-    def setUp(self) -> None:
-        Setup.setup_working_environment()
+class ReferencesUpdaterTest(TestCase):
 
     def test_replace_references(self):
         referencesUpdater = ReferencesUpdater(AbsPaths.Data,
