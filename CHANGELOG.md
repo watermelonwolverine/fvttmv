@@ -27,3 +27,8 @@
 =====
 - Fixed issue with wrongly cased paths in windows
 - Reduced help/readme duplication
+
+0.3.0
+=====
+- Added and integrated 'additional_targets_to_update' config parameter
+- Added help provision

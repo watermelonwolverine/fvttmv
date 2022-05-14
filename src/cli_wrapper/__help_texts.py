@@ -89,7 +89,7 @@ Ubuntu:\n\
 Windows:\n\
 `{0}.exe 'some folder\\some file' 'some other folder\\some other file'`".format(app_name)
 
-installation = "\
+installation_windows = "\
 Installation: Windows\n\
 =====================\n\
 \n\
@@ -160,8 +160,11 @@ Uninstallation: Windows\n\
 \n\
 Delete {0}.exe and {0}.conf files from the installation directory.\n\
 \n\
-Remove the path to the installation directory from the PATH system environment variable.\n\
-\n\
+Remove the path to the installation directory from the PATH system environment variable.".format(app_name,
+                                                                                                 pyinstaller_version,
+                                                                                                 python_version)
+
+installation_ubuntu = "\
 Installation: Ubuntu 16.04 -20.04\n\
 =================================\n\
 \n\
@@ -255,6 +258,11 @@ Delete the files /etc/{0}.conf and /usr/bin/{0}".format(app_name,
                                                         pyinstaller_version,
                                                         python_version)
 
+installation = "\
+{0}\n\
+\n\
+{1}".format(installation_windows, installation_ubuntu)
+
 issues = "\
 Known Issues and Quirks\n\
 =======================\n\
@@ -298,3 +306,21 @@ read_me = "\
 %s\n\
 \n\
 %s" % (about, installation, usage, issues)
+
+read_me_for_ubuntu = "\
+%s\n\
+\n\
+%s\n\
+\n\
+%s\n\
+\n\
+%s" % (about, installation_ubuntu, usage, issues)
+
+read_me_for_windows = "\
+%s\n\
+\n\
+%s\n\
+\n\
+%s\n\
+\n\
+%s" % (about, installation_windows, usage, issues)

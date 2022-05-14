@@ -6,6 +6,9 @@ from os import path
 from typing import List
 
 import fvttmv
+from cli_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
+from cli_wrapper.__help_provider import tell_user_how_to_use_the_program
+from cli_wrapper.__help_texts import help_text
 from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
@@ -13,8 +16,6 @@ from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.path_tools import PathTools
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
-from cli_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
-from cli_wrapper.__help_texts import help_text
 
 version_option = "--version"
 verbose_info_option = "--verbose-info"
@@ -195,10 +196,11 @@ def process_and_remove_config_args(
 
 
 def do_run() -> None:
-    src_list: list
-    dst: str
-
     args = sys.argv[1:]
+
+    if len(args) == 0:
+        tell_user_how_to_use_the_program()
+        return
 
     check_args(args)
 
