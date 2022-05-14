@@ -66,7 +66,8 @@ def perform_move_with(
         src_list: List[str],
         dst: str,
         config: RunConfig) -> None:
-    logging.debug("Running with src_list='%s', dst='%s', config='%s'",
+    logging.debug("Running with working_dir='%s', src_list='%s', dst='%s', config='%s'",
+                  os.path.abspath("."),
                   src_list,
                   dst,
                   config)

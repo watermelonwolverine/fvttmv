@@ -2,7 +2,10 @@ import os
 import sys
 from typing import List
 
+from fvttmv import db_file_encoding
+from fvttmv.config import RunConfig
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
+from fvttmv.iterators.db_files_iterator import DbFilesIterator
 from fvttmv.path_tools import PathTools
 
 # some directories shouldn't be moved
@@ -13,23 +16,25 @@ _moving_not_allowed_rel_paths = \
 
 
 class PreMoveChecker:
-    _moving_not_allowed_abs_paths: List[str]
+    __moving_not_allowed_abs_paths: List[str]
 
     # given
-    path_tools: PathTools
+    __path_tools: PathTools
 
     def __init__(self,
+                 run_config: RunConfig,
                  path_tools: PathTools):
 
         if sys.platform not in ["win32", "linux"]:
             raise FvttmvException("Unsupported platform")
 
-        self.path_tools = path_tools
+        self.__run_config = run_config
+        self.__path_tools = path_tools
+        self.__moving_not_allowed_abs_paths = []
 
-        self._moving_not_allowed_abs_paths = []
         for rel_path in _moving_not_allowed_rel_paths:
             abs_path = os.path.join(path_tools.abs_path_to_foundry_data, rel_path)
-            self._moving_not_allowed_abs_paths.append(abs_path)
+            self.__moving_not_allowed_abs_paths.append(abs_path)
 
     def perform_pre_checks(self,
                            src_list: List[str],
@@ -38,13 +43,15 @@ class PreMoveChecker:
         A few common checks that apply to files as well as directories
         """
 
+        self.__check_db_files()
+
         if not type(src_list) == list:
             raise FvttmvInternalException("Wrong type for argument src_list: {0}".format(type(src_list)))
         if not type(dst) == str:
             raise FvttmvInternalException("Wrong type for argument dst: {0}".format(type(dst)))
 
         # also checks if path is ok
-        if not self.path_tools.is_in_foundry_data(dst):
+        if not self.__path_tools.is_in_foundry_data(dst):
             raise FvttmvException("Destination path has to be inside the configured foundry Data directory")
 
         # if more than one src then the dst must be a folder
@@ -63,7 +70,7 @@ class PreMoveChecker:
             raise FvttmvInternalException()
 
         # also checks if path is ok
-        if not self.path_tools.is_in_foundry_data(src):
+        if not self.__path_tools.is_in_foundry_data(src):
             raise FvttmvException("Source paths have to be inside the configured foundry Data directory")
 
         if not os.path.exists(src):
@@ -81,13 +88,38 @@ class PreMoveChecker:
     def _is_moving_allowed(self,
                            path_to_file_or_directory: str) -> bool:
 
-        relative_path = self.path_tools.make_path_relative_to_foundry_data(path_to_file_or_directory)
+        relative_path = self.__path_tools.make_path_relative_to_foundry_data(path_to_file_or_directory)
 
         while relative_path.endswith(os.path.sep):
             relative_path = relative_path[0:-1]
 
-        for moving_not_allowed in self._moving_not_allowed_abs_paths:
+        for moving_not_allowed in self.__moving_not_allowed_abs_paths:
             if PathTools.is_parent_dir(path_to_file_or_directory, moving_not_allowed):
                 return False
 
         return True
+
+    def __check_db_files(self):
+        # fail early: check read and write access for db files and check if they are readable as utf-8
+        iterator = DbFilesIterator()
+
+        abs_paths_to_db_files = iterator.iterate_through_all(self.__run_config.get_absolute_path_to_foundry_data(),
+                                                             self.__run_config.get_additional_targets_to_update())
+
+        for abs_path_to_db_file in abs_paths_to_db_files:
+
+            # TODO test
+            if not os.access(abs_path_to_db_file, os.W_OK | os.R_OK):
+                raise FvttmvException("Cannot access {0}, need read and write permissions.".format(abs_path_to_db_file))
+
+            # check parse-ability
+            # thumbs.db is an example where this would fail, which is an old thumbnail cache from Windows XP
+            # TODO test
+            try:
+                with open(abs_path_to_db_file, "r", encoding=db_file_encoding, newline='') as fin:
+                    fin.read()
+            except Exception as ex:
+                error_msg = "Unable to read {0} as UTF-8. It may be a system file or a corrupted db file. Reason: {1}" \
+                    .format(abs_path_to_db_file,
+                            ex)
+                raise FvttmvException(error_msg)

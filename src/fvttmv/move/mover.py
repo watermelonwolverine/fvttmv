@@ -43,7 +43,8 @@ class Mover:
                                               references_updater,
                                               self.move)
 
-        self.pre_move_checker = PreMoveChecker(self.path_tools)
+        self.pre_move_checker = PreMoveChecker(run_config,
+                                               self.path_tools)
 
         ProgramConfigChecker.assert_config_is_ok(run_config)
 

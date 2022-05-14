@@ -1,6 +1,7 @@
 import logging
 
 from fvttmv import db_file_encoding
+from fvttmv.exceptions import FvttmvException
 from fvttmv.update.__references_updater_string import ReferencesUpdaterString
 from fvttmv.update.__update_context import UpdateContext
 
@@ -18,8 +19,14 @@ class ReferencesUpdaterFile:
 
         data: str
 
-        with open(path_to_db_file, "rt", encoding=db_file_encoding, newline='') as fin:
-            data = fin.read()
+        try:
+            with open(path_to_db_file, "rt", encoding=db_file_encoding, newline='') as fin:
+                data = fin.read()
+        except Exception as ex:
+            raise FvttmvException(
+                "Exception: {0}. Unable to read file {1} as UTF-8. Is this file a correct db file?".format(
+                    ex,
+                    path_to_db_file))
 
         update_context = UpdateContext(data)
 
@@ -31,7 +38,13 @@ class ReferencesUpdaterFile:
             logging.debug("No references found in %s.", path_to_db_file)
             return
 
-        with open(path_to_db_file, "wt", encoding=db_file_encoding, newline='') as fout:
-            fout.write(update_context.data)
-            fout.flush()
-            logging.info("Updated %s", path_to_db_file)
+        try:
+            with open(path_to_db_file, "wt", encoding=db_file_encoding, newline='') as fout:
+                fout.write(update_context.data)
+                fout.flush()
+                logging.info("Updated %s", path_to_db_file)
+        except Exception as ex:
+            raise FvttmvException(
+                "Exception: {0}. Unable to write to file {1}. Do you have the write permissions?".format(
+                    ex,
+                    path_to_db_file))
