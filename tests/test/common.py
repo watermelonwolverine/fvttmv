@@ -112,7 +112,8 @@ class RelPaths:
     # modules content
     #
     shared_module = os.path.join(modules, C.shared_module)
-    shared_db = os.path.join(shared_module, C.packs, C.shared_db)
+    shared_module_packs = os.path.join(shared_module, C.packs)
+    shared_db = os.path.join(shared_module_packs, C.shared_db)
 
 
 class AbsPaths:
@@ -162,6 +163,7 @@ class AbsPaths:
     # module contents
     #
     shared_module = os.path.join(Data, RelPaths.shared_module)
+    shared_module_packs = os.path.join(Data, RelPaths.shared_module_packs)
     shared_db = os.path.join(Data, RelPaths.shared_db)
 
     logs = os.path.join(os.path.abspath(C.foundrydata), C.Logs)
@@ -202,6 +204,8 @@ class DataStrings:
 
     shared_db = contains_1_and_2_original
 
+    shared_db_changed = contains_1_and_2_changed
+
     contains_none = base_data_str.format("bla/bla/bla")
 
     should_not_be_touched_db = contains_1_and_2_original
@@ -227,7 +231,7 @@ class Setup:
     @staticmethod
     def _setup_folder_structure():
         os.makedirs(AbsPaths.Logs)
-        os.makedirs(AbsPaths.shared_module)
+        os.makedirs(AbsPaths.shared_module_packs)
         os.makedirs(AbsPaths.sub_folder)
 
         #
@@ -269,6 +273,9 @@ class Setup:
 
         with open(AbsPaths.should_not_be_touched_db, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.should_not_be_touched_db)
+
+        with open(AbsPaths.shared_db, "wt", encoding=utf_8, newline='') as fout:
+            fout.write(DataStrings.shared_db)
 
     @staticmethod
     def _create_png_files():
