@@ -1,5 +1,6 @@
 from cli_wrapper.__constants import app_name
 from cli_wrapper.__versions import pyinstaller_version, python_version
+from fvttmv.config import Keys
 
 about = "\
 About\n\
@@ -142,7 +143,7 @@ Copy {0}.exe into that folder.\n\
 \n\
 Create a {0}.conf text file in that folder.\n\
 \n\
-Copy `{{\"absolute_path_to_foundry_data\":\"INSERT_PATH_HERE\"}}` into {0}.conf\n\
+Copy `{{\"{3}\":\"INSERT_PATH_HERE\"}}` into {0}.conf\n\
 \n\
 Replace `INSERT_PATH_HERE` with the path to the Data folder inside your foundrydata\n\
 (Not the foundrydata folder itself!).\n\
@@ -151,7 +152,7 @@ IMPORTANT: Escape all `\\` with `\\\\` in that path.\n\
 \n\
 It should look something like this:\n\
 \n\
-`{{\"absolute_path_to_foundry_data\":\"C:\\\\Users\\\\user\\\\foundrydata\\\\Data\"}}`\n\
+`{{\"{3}\":\"C:\\\\Users\\\\user\\\\foundrydata\\\\Data\"}}`\n\
 \n\
 Add the installation path to your PATH system environment variable.\n\
 \n\
@@ -162,7 +163,8 @@ Delete {0}.exe and {0}.conf files from the installation directory.\n\
 \n\
 Remove the path to the installation directory from the PATH system environment variable.".format(app_name,
                                                                                                  pyinstaller_version,
-                                                                                                 python_version)
+                                                                                                 python_version,
+                                                                                                 Keys.absolute_path_to_foundry_data_key)
 
 installation_ubuntu = "\
 Installation: Ubuntu 16.04 -20.04\n\
@@ -242,21 +244,22 @@ Make the file executable:\n\
 \n\
 Create a `{0}.conf` file at `/etc/`\n\
 \n\
-Copy `{{\"absolute_path_to_foundry_data\":\"INSERT_PATH_HERE\"}}` into `{0}.conf`\n\
+Copy `{{\"{3}\":\"INSERT_PATH_HERE\"}}` into `{0}.conf`\n\
 \n\
 Replace `INSERT_PATH_HERE` with the path to the Data folder inside your foundrydata\n\
 (Not the foundrydata folder itself!).\n\
 \n\
 It should look something like this:\n\
 \n\
-`{{\"absolute_path_to_foundry_data\":\"/home/user/foundrydata/Data\"}}`\n\
+`{{\"{3}\":\"/home/user/foundrydata/Data\"}}`\n\
 \n\
 Uninstallation: Ubuntu\n\
 ======================\n\
 \n\
 Delete the files /etc/{0}.conf and /usr/bin/{0}".format(app_name,
                                                         pyinstaller_version,
-                                                        python_version)
+                                                        python_version,
+                                                        Keys.absolute_path_to_foundry_data_key)
 
 installation = "\
 {0}\n\
@@ -291,6 +294,39 @@ handles arguments and probably can't be fixed. For example on\n\
 Windows `{0}.exe '\\folder name with spaces\\' .\\some\\other\\path`\n\
 will fail but `{0}.exe '\\folder name with spaces' .\\some\\other\\path` will succeed.".format(app_name)
 
+additional_configuration = "\
+Additional Configuration\n\
+========================\n\
+\n\
+You may have db files outside of worlds you would like to update.\n\
+For example you may have one or more modules that you use to share things between worlds.\n\
+In this case you need to tell the program where to look for those db files so it can update them.\n\
+For this purpose add the following to your {0}.conf:\n\
+\n\
+```\n\
+\"{1}\":[LIST_OF_ADDITIONAL_TARGETS]\n\
+```\n\
+\n\
+`LIST_OF_ADDITIONAL_TARGETS` has be a list of existing absolute paths to either files or folders.\n\
+They also have to be inside the {2} directory.\n\
+\n\
+Important: Folders are not traversed recursively.\n\
+\n\
+With this configuration your {0}.conf file might look something like this:\n\
+\n\
+```\n\
+{{\n\
+    \"{2}\":\"/home/user/foundrydata/Data\",\n\
+    \"{1}\":[\n\
+             \"/home/user/foundrydata/Data/modules/share-module/packs\",\n\
+             \"/home/user/foundrydata/Data/modules/other-share-module/packs/some-db.db\"\n\
+            ]\n\
+}}\n\
+```\n\
+".format(app_name,
+         Keys.additional_targets_to_update,
+         Keys.absolute_path_to_foundry_data_key)
+
 help_text = "\
 %s\n\
 \n\
@@ -305,7 +341,9 @@ read_me = "\
 \n\
 %s\n\
 \n\
-%s" % (about, installation, usage, issues)
+%s\n\
+\n\
+%s" % (about, installation, usage, additional_configuration, issues)
 
 read_me_for_ubuntu = "\
 %s\n\
@@ -314,7 +352,9 @@ read_me_for_ubuntu = "\
 \n\
 %s\n\
 \n\
-%s" % (about, installation_ubuntu, usage, issues)
+%s\n\
+\n\
+%s" % (about, installation_ubuntu, usage, additional_configuration, issues)
 
 read_me_for_windows = "\
 %s\n\
@@ -323,4 +363,6 @@ read_me_for_windows = "\
 \n\
 %s\n\
 \n\
-%s" % (about, installation_windows, usage, issues)
+%s\n\
+\n\
+%s" % (about, installation_windows, usage, additional_configuration, issues)

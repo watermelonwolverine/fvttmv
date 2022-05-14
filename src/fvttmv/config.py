@@ -183,7 +183,7 @@ class ProgramConfigChecker:
             PathTools.assert_path_format_is_ok(abs_path_to_target)
         except FvttmvException as ex:
             error_msg = ProgramConfigChecker.error_message.format(Keys.additional_targets_to_update,
-                                                      ex)
+                                                                  ex)
             raise FvttmvException(error_msg)
 
         if not os.path.isfile(abs_path_to_target) \
