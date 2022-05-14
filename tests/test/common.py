@@ -70,6 +70,7 @@ class C:
 
     # Logs contents
     error_log = "error.log"
+    Data_txt = "Data.txt"
 
 
 # relative to Data folder, NOT to working dir
@@ -123,6 +124,7 @@ class AbsPaths:
     # foundrydata contents
     #
     Data = os.path.join(foundrydata, C.Data)
+    Data_txt = os.path.join(foundrydata, C.Data_txt)
     Logs = os.path.join(foundrydata, C.Logs)
 
     #
@@ -215,6 +217,7 @@ class FileContents:
     file_1 = "blablabla"
     file_2 = "this is the contents of file 2"
     file_3 = "blabla\nblablabla"
+    Data_txt = "OOF"
 
 
 class Setup:
@@ -253,6 +256,9 @@ class Setup:
         Setup._create_db_files()
         Setup._create_png_files()
         Setup._create_world_json_files()
+
+        with open(AbsPaths.Data_txt, "wt", encoding=utf_8, newline='') as fout:
+            fout.write(FileContents.Data_txt)
 
     @staticmethod
     def _create_db_files():

@@ -143,7 +143,7 @@ class ProgramConfigChecker:
         if not os.path.isdir(abs_path_to_foundry_data):
             error_msg = ProgramConfigChecker.error_message.format(
                 Keys.absolute_path_to_foundry_data_key,
-                "{0} is not absolute".format(abs_path_to_foundry_data))
+                "{0} is not a directory.".format(abs_path_to_foundry_data))
             raise FvttmvException(error_msg)
 
     @staticmethod
@@ -182,8 +182,9 @@ class ProgramConfigChecker:
         try:
             PathTools.assert_path_format_is_ok(abs_path_to_target)
         except FvttmvException as ex:
-            ProgramConfigChecker.error_message.format(Keys.additional_targets_to_update,
+            error_msg = ProgramConfigChecker.error_message.format(Keys.additional_targets_to_update,
                                                       ex)
+            raise FvttmvException(error_msg)
 
         if not os.path.isfile(abs_path_to_target) \
                 and not os.path.isdir(abs_path_to_target):
@@ -197,5 +198,5 @@ class ProgramConfigChecker:
         if not path_tools.is_in_foundry_data(abs_path_to_target):
             error_msg = ProgramConfigChecker.error_message.format(
                 Keys.additional_targets_to_update,
-                "{0} is neither not inside the foundry Data directory.".format(abs_path_to_target))
+                "{0} is not inside the foundry Data directory.".format(abs_path_to_target))
             raise FvttmvException(error_msg)
