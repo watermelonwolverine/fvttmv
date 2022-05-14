@@ -23,14 +23,14 @@ class ReferencesSearcherTest(TestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        self._path_tools = PathTools(AbsPaths.Data)
 
     def test_search_exceptions(self):
         print("test_search_exceptions")
 
         text_io_wrapper = TextIOWrapperMock()
 
-        references_searcher = ReferencesSearcher(self._path_tools,
+        references_searcher = ReferencesSearcher(AbsPaths.Data,
+                                                 [],  # TODO test: additional targets
                                                  text_io_wrapper)
 
         relative_path = os.path.join("assets", "images", "test1.png")
@@ -54,7 +54,8 @@ class ReferencesSearcherTest(TestCase):
 
         text_io_wrapper = TextIOWrapperMock()
 
-        references_searcher = ReferencesSearcher(self._path_tools,
+        references_searcher = ReferencesSearcher(AbsPaths.Data,
+                                                 [],  # TODO test: additional targets
                                                  text_io_wrapper)
 
         references_searcher.search([AbsPaths.images])

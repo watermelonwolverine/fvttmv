@@ -10,6 +10,7 @@ class ReferencesSearcherDbFilesTest(TestCase):
         expected = []
 
         result = ReferencesSearcherDbFiles.search_for_references_in_db_files(AbsPaths.Data,
+                                                                             [],  # TODO test: additional targets
                                                                              "does/not/exist")
 
         self.assertEqual(result, expected)
@@ -21,6 +22,7 @@ class ReferencesSearcherDbFilesTest(TestCase):
                     AbsPaths.contains_1_and_2_db]
 
         result = ReferencesSearcherDbFiles.search_for_references_in_db_files(AbsPaths.Data,
+                                                                             [],  # TODO test: additional targets
                                                                              References.file1_original)
 
         self.assertEqual(expected, result)

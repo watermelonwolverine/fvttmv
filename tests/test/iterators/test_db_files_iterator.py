@@ -16,7 +16,7 @@ class DbFilesIteratorTest(TestCase):
 
         result = []
 
-        for db_file in DbFilesIterator.iterate_through_world_dir(AbsPaths.world1):
+        for db_file in DbFilesIterator()._DbFilesIterator__iterate_through_world_dir(AbsPaths.world1):
             result.append(db_file)
 
         self.assertEqual(expected, result)
@@ -26,7 +26,8 @@ class DbFilesIteratorTest(TestCase):
         print("test_iterate_through_world_dir_exception1")
 
         try:
-            for _ in DbFilesIterator.iterate_through_all_worlds("./foundrydata_copy"):
+            # noinspection PyUnresolvedReferences
+            for _ in DbFilesIterator()._DbFilesIterator__iterate_through_all_worlds("./foundrydata_copy"):
                 self.fail()
         except FvttmvException:
             pass
@@ -36,7 +37,8 @@ class DbFilesIteratorTest(TestCase):
         print("test_iterate_through_world_dir_exception2")
 
         try:
-            for _ in DbFilesIterator.iterate_through_all_worlds(AbsPaths.contains_1_db):
+            # noinspection PyUnresolvedReferences
+            for _ in DbFilesIterator()._DbFilesIterator__iterate_through_world_dir(AbsPaths.contains_1_db):
                 self.fail()
         except FvttmvException:
             pass
@@ -48,7 +50,7 @@ class DbFilesIteratorTest(TestCase):
                                                 "does_not_exist")
 
         try:
-            for _ in DbFilesIterator.iterate_through_world_dir(path_that_does_not_exist):
+            for _ in DbFilesIterator()._DbFilesIterator__iterate_through_world_dir(path_that_does_not_exist):
                 self.fail()
         except FvttmvException:
             pass
@@ -64,7 +66,8 @@ class DbFilesIteratorTest(TestCase):
 
         result = []
 
-        for db_file in DbFilesIterator.iterate_through_all_worlds(AbsPaths.Data):
+        # noinspection PyUnresolvedReferences
+        for db_file in DbFilesIterator()._DbFilesIterator__iterate_through_all_worlds(AbsPaths.Data):
             result.append(db_file)
 
         self.assertEqual(expected, result)

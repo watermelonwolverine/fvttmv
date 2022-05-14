@@ -12,6 +12,7 @@ class ReferencesSearcherDbFiles:
     @staticmethod
     def search_for_references_in_db_files(
             abs_path_to_foundry_data: str,
+            abs_paths_to_additional_targets: List[str],
             reference: str) -> List[str]:
         """
         Searches all references of all *.db files of all worlds
@@ -20,7 +21,8 @@ class ReferencesSearcherDbFiles:
 
         result = []
 
-        for abs_path_to_db_file in db_files_iterator.iterate_through_all_worlds(abs_path_to_foundry_data):
+        for abs_path_to_db_file in db_files_iterator.iterate_through_all(abs_path_to_foundry_data,
+                                                                         abs_paths_to_additional_targets):
             if ReferencesSearcherFile.search_for_references_in_file(abs_path_to_db_file,
                                                                     reference):
                 result.append(abs_path_to_db_file)

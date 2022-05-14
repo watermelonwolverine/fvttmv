@@ -1,4 +1,3 @@
-import os.path
 from typing import List
 
 from fvttmv.config import ProgramConfigChecker
@@ -23,51 +22,13 @@ class ReferencesUpdater:
     def replace_references(self,
                            old_reference: str,
                            new_reference: str):
+        iterator = DbFilesIterator()
 
-        self.__replace_references_in_world_dbs(old_reference,
-                                               new_reference)
-
-        self.__replace_references_in_additional_targets(old_reference,
-                                                        new_reference)
-
-    def __replace_references_in_world_dbs(self,
-                                          old_reference: str,
-                                          new_reference: str):
-
-        for db_file in DbFilesIterator.iterate_through_all_worlds(self.__abs_path_to_foundry_data):
+        for db_file in iterator.iterate_through_all(self.__abs_path_to_foundry_data,
+                                                    self.__additional_targets_to_update):
             self.__replace_references_in_file(db_file,
                                               old_reference,
                                               new_reference)
-
-    def __replace_references_in_additional_targets(self,
-                                                   old_reference: str,
-                                                   new_reference: str):
-        for additional_target in self.__additional_targets_to_update:
-            self.__replace_references_in_additional_target(additional_target,
-                                                           old_reference,
-                                                           new_reference)
-
-    @staticmethod
-    def __replace_references_in_additional_target(additional_target,
-                                                  old_reference: str,
-                                                  new_reference: str):
-        if os.path.isfile(additional_target):
-            ReferencesUpdater.__replace_references_in_file(additional_target,
-                                                           old_reference,
-                                                           new_reference)
-        elif os.path.isdir(additional_target):
-            ReferencesUpdater.__replace_references_in_additional_target_dir(additional_target,
-                                                                            old_reference,
-                                                                            new_reference)
-
-    @staticmethod
-    def __replace_references_in_additional_target_dir(additional_target_dir: str,
-                                                      old_reference: str,
-                                                      new_reference: str):
-        for db_file in DbFilesIterator.iterate_through_dir(additional_target_dir):
-            ReferencesUpdater.__replace_references_in_file(db_file,
-                                                           old_reference,
-                                                           new_reference)
 
     @staticmethod
     def __replace_references_in_file(abs_path_to_db_file: str,

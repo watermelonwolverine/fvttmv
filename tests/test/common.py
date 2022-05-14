@@ -55,7 +55,6 @@ class C:
     world_json = "world.json"
     not_a_world1 = "not_a_world1"
     not_a_world2 = "not_a_world2"
-    thumbs_db = "thumbs.db"
     contains_1_and_2_db = "contains_1_and_2.db"
     contains_1_db = "contains_1.db"
     contains_2_db = "contains_2.db"
@@ -63,7 +62,13 @@ class C:
     should_not_be_touched_db = "should_not_be_touched.db"
     not_a_db_txt = "not_a_db.txt"
 
-    # logs contents
+    #
+    # modules contents
+    #
+    shared_module = "shared_module"
+    shared_db = "shared.db"
+
+    # Logs contents
     error_log = "error.log"
 
 
@@ -96,13 +101,18 @@ class RelPaths:
     not_a_world2 = os.path.join(worlds, C.not_a_world2)
 
     should_not_be_touched_db = os.path.join(world1, C.should_not_be_touched_db)
-    thumbs_db = os.path.join(world1, C.data, C.thumbs_db)
     contains_1_db = os.path.join(world1, C.data, C.contains_1_db)
     contains_2_db = os.path.join(world1, C.packs, C.contains_2_db)
     contains_1_and_2_db = os.path.join(world2, C.data, C.contains_1_and_2_db)
     contains_none_db = os.path.join(world2, C.packs, C.contains_none_db)
 
     not_a_db_txt = os.path.join(world2, C.data, C.not_a_db_txt)
+
+    #
+    # modules content
+    #
+    shared_module = os.path.join(modules, C.shared_module)
+    shared_db = os.path.join(shared_module, C.packs, C.shared_db)
 
 
 class AbsPaths:
@@ -142,15 +152,19 @@ class AbsPaths:
 
     # this should be ignored, even though it is a db file
     should_not_be_touched_db = os.path.join(Data, RelPaths.should_not_be_touched_db)
-    thumbs_db = os.path.join(Data, RelPaths.thumbs_db)
     contains_1_db = os.path.join(Data, RelPaths.contains_1_db)
     contains_2_db = os.path.join(Data, RelPaths.contains_2_db)
     contains_1_and_2_db = os.path.join(Data, RelPaths.contains_1_and_2_db)
     contains_none_db = os.path.join(Data, RelPaths.contains_none_db)
     not_a_db_txt = os.path.join(Data, RelPaths.not_a_db_txt)
 
-    logs = os.path.join(os.path.abspath(C.foundrydata), C.Logs)
+    #
+    # module contents
+    #
+    shared_module = os.path.join(Data, RelPaths.shared_module)
+    shared_db = os.path.join(Data, RelPaths.shared_db)
 
+    logs = os.path.join(os.path.abspath(C.foundrydata), C.Logs)
     error_log = os.path.join(logs, C.error_log)
 
 
@@ -186,11 +200,11 @@ class DataStrings:
 
     contains_1_and_2_changed = contains_1_changed + "\n" + contains_2_original
 
+    shared_db = contains_1_and_2_original
+
     contains_none = base_data_str.format("bla/bla/bla")
 
     should_not_be_touched_db = contains_1_and_2_original
-
-    thumbs_db = contains_1_and_2_original
 
 
 class FileContents:
@@ -213,7 +227,12 @@ class Setup:
     @staticmethod
     def _setup_folder_structure():
         os.makedirs(AbsPaths.Logs)
-        os.makedirs(os.path.join(AbsPaths.sub_folder))
+        os.makedirs(AbsPaths.shared_module)
+        os.makedirs(AbsPaths.sub_folder)
+
+        #
+        # worlds
+        #
         os.makedirs(os.path.join(AbsPaths.not_a_world1, C.data))
         os.makedirs(os.path.join(AbsPaths.not_a_world1, C.packs))
         os.makedirs(os.path.join(AbsPaths.not_a_world1, C.scenes))
@@ -247,9 +266,6 @@ class Setup:
 
         with open(AbsPaths.not_a_db_txt, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.not_a_db)
-
-        with open(AbsPaths.thumbs_db, "wt", encoding=utf_8, newline='') as fout:
-            fout.write(DataStrings.thumbs_db)
 
         with open(AbsPaths.should_not_be_touched_db, "wt", encoding=utf_8, newline='') as fout:
             fout.write(DataStrings.should_not_be_touched_db)

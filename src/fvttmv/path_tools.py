@@ -175,3 +175,13 @@ class PathTools:
                  + lower[index_of_difference + 1:]
 
         return result
+
+    @staticmethod
+    def assert_path_is_file_or_dir(path: str):
+        if not os.path.isdir(path) and not os.path.isfile(path):
+            raise FvttmvInternalException("{0} is nor a file neither a directory.".format(path))
+
+    @staticmethod
+    def assert_path_is_dir(path: str):
+        if not os.path.isdir(path):
+            raise FvttmvInternalException("{0} is not a directory.".format(path))

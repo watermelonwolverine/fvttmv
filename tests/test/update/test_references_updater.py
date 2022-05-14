@@ -40,8 +40,3 @@ class ReferencesUpdaterTest(TestCase):
             data = fin.read()
             self.assertEqual(data,
                              DataStrings.should_not_be_touched_db)
-
-        with open(AbsPaths.thumbs_db, "r", encoding=utf_8, newline='') as fin:
-            data = fin.read()
-            self.assertEqual(data,
-                             DataStrings.thumbs_db)
