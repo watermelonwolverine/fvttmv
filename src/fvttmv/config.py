@@ -42,7 +42,7 @@ class ProgramConfigImpl(ProgramConfig):
         return self.__additional_targets_to_update
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        return str(self.__dict__)
 
     def __repr__(self):
         return str(self)
@@ -114,7 +114,7 @@ class RunConfig(ProgramConfig):
         return self._program_config.get_additional_targets_to_update()
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        return str(self.__dict__)
 
     def __repr__(self):
         return str(self)

@@ -55,6 +55,8 @@ class PathTools:
     @staticmethod
     def is_parent_dir(absolute_parent_path,
                       absolute_path):
+        # TODO check: this returns true if absolute_path == absolute_parent_path, is this intentional?
+
         PathTools.assert_path_format_is_ok(absolute_path)
         PathTools.assert_path_format_is_ok(absolute_parent_path)
 

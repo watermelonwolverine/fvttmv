@@ -47,7 +47,7 @@ class ReplaceReferenceCall:
             and self.new_reference == otherCall.new_reference
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        return str(self.__dict__)
 
     def __repr__(self):
         return self.__str__()
@@ -90,7 +90,7 @@ class ConfirmOverrideCall:
             and self.abs_path_to_dst_file == otherCall.abs_path_to_dst_file
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        return str(self.__dict__)
 
     def __repr__(self):
         return self.__str__()
