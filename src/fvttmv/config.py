@@ -70,14 +70,21 @@ class ConfigFileReader:
     @staticmethod
     def parse_dict(config_dict: dict) -> ProgramConfig:
 
+        keys_to_process: List[str] = list(config_dict.keys())
+
         abs_path_to_foundry_data: str = config_dict[Keys.absolute_path_to_foundry_data_key]
+        keys_to_process.remove(Keys.absolute_path_to_foundry_data_key)
 
         additional_targets_to_update: List[str]
 
         if Keys.additional_targets_to_update in config_dict:
             additional_targets_to_update = config_dict[Keys.additional_targets_to_update]
+            keys_to_process.remove(Keys.additional_targets_to_update)
         else:
             additional_targets_to_update = []
+
+        if len(keys_to_process) != 0:
+            raise FvttmvException("Unknown configuration keys: {0}".format(keys_to_process))
 
         return ProgramConfigImpl(abs_path_to_foundry_data,
                                  additional_targets_to_update)
