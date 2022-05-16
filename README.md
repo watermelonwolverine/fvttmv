@@ -208,24 +208,35 @@ the `dst` argument, instead interprets all given paths as source paths
 
 `--help` Display help and exit
 
-Examples
---------
+Examples: Windows
+-----------------
 
 Renaming/Moving a file:
 
-Ubuntu:
-`fvttmv old/path/to/file1 new/path/to/file1`
-
-Windows:
 `fvttmv.exe old\path\to\file1 new\path\to\file1`
 
 Moving multiple files into an existing folder:
 
-Ubuntu:
-`fvttmv path/to/file1 path/to/file2 path/to/folder`
-
-Windows:
 `fvttmv.exe path\to\file1 path\to\file2 path\to\folder`
+
+Looking for references to one or more files:
+
+`fvttmv.exe --check some\folder\some_file.png some\folder\some_other_file.png`
+
+Use single quotes when moving a file with a space:
+
+`fvttmv.exe 'some folder\some file' 'some other folder\some other file'`
+
+Examples: Ubuntu
+----------------
+
+Renaming/Moving a file:
+
+`fvttmv old/path/to/file1 new/path/to/file1`
+
+Moving multiple files into an existing folder:
+
+`fvttmv path/to/file1 path/to/file2 path/to/folder`
 
 Supports wildcards on Ubuntu:
 
@@ -233,19 +244,41 @@ Supports wildcards on Ubuntu:
 
 Looking for references to one or more files:
 
-Ubuntu:
 `fvttmv --check some/folder/some_file.png some/folder/some_other_file.png`
-
-Windows:
-`fvttmv.exe --check some\folder\some_file.png some\folder\some_other_file.png`
 
 Use single quotes when moving a file with a space:
 
-Ubuntu:
 `fvttmv 'some folder/some file' 'some other folder/some other file'`
 
-Windows:
-`fvttmv.exe 'some folder\some file' 'some other folder\some other file'`
+Additional Configuration
+========================
+
+You may have db files outside of worlds you would like to update.
+For example you may have one or more modules that you use to share things between worlds.
+In this case you need to tell the program where to look for those db files so it can update them.
+For this purpose add the following to your fvttmv.conf:
+
+```
+"additional_targets_to_update":LIST_OF_ADDITIONAL_TARGETS
+```
+
+`LIST_OF_ADDITIONAL_TARGETS` has be a list of existing absolute paths to either files or folders.
+They also have to be inside the absolute_path_to_foundry_data directory.
+
+Important: Folders are not traversed recursively.
+
+With this configuration your fvttmv.conf file might look something like this:
+
+```
+{
+    "absolute_path_to_foundry_data":"/home/user/foundrydata/Data",
+    "additional_targets_to_update":[
+             "/home/user/foundrydata/Data/modules/share-module/packs",
+             "/home/user/foundrydata/Data/modules/other-share-module/packs/some-db.db"
+            ]
+}
+```
+
 
 Known Issues and Quirks
 =======================
@@ -258,6 +291,11 @@ Filesystems are quirky and subsequently so is this program.
 Trailing `/` and `\` are ignored. So `fvttmv some_file some_non_existing_path/` will be treated the same
 as `fvttmv some_file some_non_existing_path`. It's generally good to avoid trailing `/` and `\` as they only cause
 issues, especially `\`.
+
+If the programs encounters a .db file it can not read as UTF-8 it will fail.
+An example for such a file would be `thumbs.db` which is a thumbnail cache in Windows XP.
+Right now the only thing that can be done is to remove the file if it's not needed or temporarily rename it.
+If this problem is encountered often, I'll may implement a blacklist feature, so let me know if this happens to you.
 
 Windows
 -------
