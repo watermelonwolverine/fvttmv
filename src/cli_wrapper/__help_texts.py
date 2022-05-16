@@ -342,12 +342,23 @@ With this configuration your {0}.conf file might look something like this:\n\
          Keys.additional_targets_to_update,
          Keys.absolute_path_to_foundry_data_key)
 
-help_text = "\
+help_text_windows = "\
 %s\n\
 \n\
 %s\n\
 \n\
-%s" % (about, usage, issues)
+%s\n\
+\n\
+%s" % (about, usage, usage_examples_windows, issues)
+
+help_text_ubuntu = "\
+%s\n\
+\n\
+%s\n\
+\n\
+%s\n\
+\n\
+%s" % (about, usage, usage_examples_ubuntu, issues)
 
 read_me = "\
 %s\n\

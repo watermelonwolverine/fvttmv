@@ -8,7 +8,7 @@ from typing import List
 import fvttmv
 from cli_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
 from cli_wrapper.__help_provider import tell_user_how_to_use_the_program
-from cli_wrapper.__help_texts import help_text
+from cli_wrapper.__help_texts import help_text_windows, help_text_ubuntu
 from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
@@ -33,35 +33,45 @@ allowed_args = [
     help_option
 ]
 
+win32 = "win32"
+linux = "linux"
+supported_platforms = [win32, linux]
+
 bug_report_message = "Please file a bug report on %s" % issues_url
+unsupported_os_error_msg = "Unsupported OS: {0}"
 
 
-def get_path_to_config_file():
-    if sys.platform == "linux":
-        return path_to_config_file_linux
-    elif sys.platform == "win32":
-        dir_of_script: str
-        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            # running in a PyInstaller bundle
-            # TODO fix: this doesn't work in cmd only in powershell
-            dir_of_script = os.path.dirname(sys.argv[0])
-        else:
-            # running in normal python environment
-            dir_of_script = path.abspath(path.dirname(__file__))
-        return os.path.join(dir_of_script, config_file_name)
+def __get_path_to_config_file_windows():
+    dir_of_script: str
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        # running in a PyInstaller bundle
+        # TODO fix: this doesn't work in cmd only in powershell
+        dir_of_script = os.path.dirname(sys.argv[0])
     else:
-        raise FvttmvException("Unsupported OS: {0}".format(sys.platform))
+        # running in normal python environment
+        dir_of_script = path.abspath(path.dirname(__file__))
+
+    return os.path.join(dir_of_script, config_file_name)
 
 
-def read_config_file() -> ProgramConfig:
-    path_to_config_file = get_path_to_config_file()
+def __get_path_to_config_file():
+    if sys.platform == linux:
+        return path_to_config_file_linux
+    elif sys.platform == win32:
+        return __get_path_to_config_file_windows()
+    else:
+        raise FvttmvException(unsupported_os_error_msg.format(sys.platform))
+
+
+def __read_config_file() -> ProgramConfig:
+    path_to_config_file = __get_path_to_config_file()
 
     program_config = ConfigFileReader.read_config_file(path_to_config_file)
 
     return program_config
 
 
-def perform_move_with(
+def __perform_move_with(
         src_list: List[str],
         dst: str,
         config: RunConfig) -> None:
@@ -91,7 +101,7 @@ def perform_move_with(
                abs_dst)
 
 
-def perform_search_with(
+def __perform_search_with(
         search_list: List[str],
         config: RunConfig) -> None:
     logging.debug("Running with search_list='%s', config='%s'",
@@ -110,14 +120,14 @@ def perform_search_with(
     searcher.search(abs_search_list)
 
 
-def check_for_unknown_args(args: List[str]) -> None:
+def __check_for_unknown_args(args: List[str]) -> None:
     for arg in args:
         if arg.startswith("-"):
             if arg not in allowed_args:
                 raise FvttmvException("Unknown argument: {0}".format(arg))
 
 
-def check_for_illegal_arg_combos(args: List[str]) -> None:
+def __check_for_illegal_arg_combos(args: List[str]) -> None:
     combination_error_msg = "Combining '{0}' and '{1}' is not allowed"
 
     if check_option in args and no_move_option in args:
@@ -129,19 +139,19 @@ def check_for_illegal_arg_combos(args: List[str]) -> None:
         raise FvttmvException(msg)
 
 
-def check_for_duplicate_args(args: List[str]) -> None:
+def __check_for_duplicate_args(args: List[str]) -> None:
     for allowed_arg in allowed_args:
         if args.count(allowed_arg) > 1:
             raise FvttmvException("Only one occurrence per option is allowed")
 
 
-def check_args(args: List[str]) -> None:
-    check_for_unknown_args(args)
-    check_for_illegal_arg_combos(args)
-    check_for_duplicate_args(args)
+def __check_args(args: List[str]) -> None:
+    __check_for_unknown_args(args)
+    __check_for_illegal_arg_combos(args)
+    __check_for_duplicate_args(args)
 
 
-def add_logging_stream_handler(level: int):
+def __add_logging_stream_handler(level: int):
     root = logging.getLogger()
     root.setLevel(level)
 
@@ -160,19 +170,19 @@ def configure_logging(
     Processes all args which don't affect the run config
     """
     if verbose_debug_option in args:
-        add_logging_stream_handler(logging.DEBUG)
+        __add_logging_stream_handler(logging.DEBUG)
         args.remove(verbose_debug_option)
     elif verbose_info_option in args:
-        add_logging_stream_handler(logging.INFO)
+        __add_logging_stream_handler(logging.INFO)
         args.remove(verbose_info_option)
     else:
         logging.disable(logging.CRITICAL)
         logging.disable(logging.ERROR)
 
 
-def read_bool_arg(arg: str,
-                  args: List[str],
-                  default: bool = False):
+def __read_bool_arg(arg: str,
+                    args: List[str],
+                    default: bool = False):
     if arg in args:
         args.remove(arg)
         return True
@@ -180,29 +190,47 @@ def read_bool_arg(arg: str,
         return default
 
 
-def process_and_remove_config_args(
+def __process_and_remove_config_args(
         config: RunConfig,
         args: List[str]) -> None:
     """
     Processes all args which affect the run config
     """
 
-    config.no_move = read_bool_arg(no_move_option,
+    config.no_move = __read_bool_arg(no_move_option,
+                                     args)
+    config.check_only = __read_bool_arg(check_option,
+                                        args)
+    config.force = __read_bool_arg(force_option,
                                    args)
-    config.check_only = read_bool_arg(check_option,
-                                      args)
-    config.force = read_bool_arg(force_option,
-                                 args)
 
 
-def do_run() -> None:
+def __check_platform():
+    if sys.platform not in supported_platforms:
+        raise FvttmvException(unsupported_os_error_msg.format(sys.platform))
+
+
+def __print_help_text():
+    platform = sys.platform
+
+    if platform == win32:
+        print(help_text_windows)
+    elif platform == linux:
+        print(help_text_ubuntu)
+    else:
+        raise FvttmvException(unsupported_os_error_msg.format(platform))
+
+
+def __do_run() -> None:
+    __check_platform()
+
     args = sys.argv[1:]
 
     if len(args) == 0:
         tell_user_how_to_use_the_program()
         return
 
-    check_args(args)
+    __check_args(args)
 
     configure_logging(args)
 
@@ -210,24 +238,24 @@ def do_run() -> None:
                   sys.argv)
 
     if help_option in args:
-        print(help_text)
+        __print_help_text()
         return
 
     if version_option in args:
         print("{0} version: {1}".format(app_name, fvttmv.__version__))
         return
 
-    config = RunConfig(read_config_file())
+    config = RunConfig(__read_config_file())
 
-    process_and_remove_config_args(config,
-                                   args)
+    __process_and_remove_config_args(config,
+                                     args)
 
     if config.check_only:
         if len(args) < 1:
             raise FvttmvException("Search argument missing")
 
-        perform_search_with(args,
-                            config)
+        __perform_search_with(args,
+                              config)
     else:
         if len(args) < 1:
             raise FvttmvException("Source argument missing")
@@ -238,14 +266,14 @@ def do_run() -> None:
 
         destination_path = args[-1]  # last arg is destination arg
 
-        perform_move_with(source_paths,
-                          destination_path,
-                          config)
+        __perform_move_with(source_paths,
+                            destination_path,
+                            config)
 
 
 def main() -> None:
     try:
-        do_run()
+        __do_run()
     except FvttmvInternalException:
         formatted = traceback.format_exc()
         logging.error(formatted)
