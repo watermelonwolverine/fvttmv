@@ -1,4 +1,3 @@
-import json
 from typing import List
 
 from fvttmv.config import RunConfig, ProgramConfig, ProgramConfigImpl

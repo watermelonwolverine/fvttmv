@@ -3,7 +3,6 @@ import logging
 import os
 import sys
 import traceback
-from os import path
 from typing import List
 
 import fvttmv
@@ -50,7 +49,7 @@ def __get_path_to_config_file_windows():
         dir_of_script = os.path.dirname(sys.argv[0])
     else:
         # running in normal python environment
-        dir_of_script = path.abspath(path.dirname(__file__))
+        dir_of_script = os.path.abspath(os.path.dirname(__file__))
 
     return os.path.join(dir_of_script, config_file_name)
 
@@ -83,12 +82,12 @@ def __perform_move_with(
                   config)
 
     # abs_path removes trailing \ and / but doesn't fail on illegal characters
-    abs_dst = path.abspath(dst)
+    abs_dst = os.path.abspath(dst)
     abs_src_list = []
 
     for src in src_list:
         abs_src_list.append(
-            path.abspath(src))
+            os.path.abspath(src))
 
     references_updater = ReferencesUpdater(config.get_absolute_path_to_foundry_data(),
                                            config.get_additional_targets_to_update())
@@ -113,7 +112,7 @@ def __perform_search_with(
 
     for src in search_list:
         abs_search_list.append(
-            path.abspath(src))
+            os.path.abspath(src))
 
     searcher = ReferencesSearcher(config.get_absolute_path_to_foundry_data(),
                                   config.get_additional_targets_to_update())
