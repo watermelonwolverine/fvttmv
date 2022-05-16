@@ -13,7 +13,6 @@ from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
-from fvttmv.path_tools import PathTools
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 
@@ -80,7 +79,8 @@ def perform_move_with(
         abs_src_list.append(
             path.abspath(src))
 
-    references_updater = ReferencesUpdater(config.get_absolute_path_to_foundry_data())
+    references_updater = ReferencesUpdater(config.get_absolute_path_to_foundry_data(),
+                                           config.get_additional_targets_to_update())
     override_confirm = OverrideConfirm()
 
     mover = Mover(config,
@@ -104,9 +104,8 @@ def perform_search_with(
         abs_search_list.append(
             path.abspath(src))
 
-    path_tools = PathTools(config.get_absolute_path_to_foundry_data())
-
-    searcher = ReferencesSearcher(path_tools)
+    searcher = ReferencesSearcher(config.get_absolute_path_to_foundry_data(),
+                                  config.get_additional_targets_to_update())
 
     searcher.search(abs_search_list)
 
