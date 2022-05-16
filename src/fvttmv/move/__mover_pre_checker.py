@@ -14,6 +14,8 @@ _moving_not_allowed_rel_paths = \
      "systems",
      "modules"]
 
+cannot_simultaneously_error_msg = "Cannot simultaneously move {0} and {1}"
+
 
 class PreMoveChecker:
     __moving_not_allowed_abs_paths: List[str]
@@ -61,10 +63,12 @@ class PreMoveChecker:
                                   .format(dst))
 
         for src in src_list:
-            self.check_src(src)
+            self.check_src(src,
+                           src_list)
 
     def check_src(self,
-                  src: str) -> None:
+                  src: str,
+                  src_list: List[str]) -> None:
 
         if src.endswith(os.path.sep):
             raise FvttmvInternalException()
@@ -83,6 +87,23 @@ class PreMoveChecker:
             if not os.path.isfile(src) \
                     and not os.path.isdir(src):
                 raise FvttmvException("All source paths have to be files or a directories")
+
+            other_src_list = src_list.copy()
+            other_src_list.remove(src)
+            for other_src in other_src_list:
+                
+                # Can't move parent and child dir simultaneously
+                # TODO test: try to move parent and child or move file/dir twice
+                if PathTools.is_parent_dir(other_src, src):
+                    raise FvttmvException(cannot_simultaneously_error_msg.format(other_src, src))
+
+                # Without this it fails during operation when moving two different folders which have the same name
+                # for example moving creatures/players and creature_tokens/player into empty folder some_folder
+                # TODO test
+                _, other_name = os.path.split(other_src)
+                _, name = os.path.split(src)
+                if other_name == name:
+                    raise FvttmvException(cannot_simultaneously_error_msg.format(other_src, src))
 
         if not self._is_moving_allowed(src):
             raise FvttmvException("Moving of '{0}' is not allowed"
