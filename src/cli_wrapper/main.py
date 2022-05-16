@@ -1,3 +1,4 @@
+import glob
 import logging
 import os
 import sys
@@ -221,6 +222,29 @@ def __print_help_text():
         raise FvttmvException(unsupported_os_error_msg.format(platform))
 
 
+def __glob_paths(paths: List[str]):
+    result = []
+
+    for path in paths:
+        result += glob.glob(path)
+
+    return result
+
+
+def __maybe_glob_paths(paths: List[str]):
+    platform = sys.platform
+
+    if platform == linux:
+        # bash: paths are already globbed before passed as argument
+        return paths
+    elif platform == win32:
+        result = __glob_paths(paths)
+        logging.debug("Globbed args: {0}".format(result))
+        return result
+    else:
+        raise FvttmvException(unsupported_os_error_msg.format(platform))
+
+
 def __do_run() -> None:
     __check_platform()
 
@@ -249,6 +273,10 @@ def __do_run() -> None:
 
     __process_and_remove_config_args(config,
                                      args)
+
+    # globbing arguments here to achieve consistent behavior across Windows and Ubuntu even though it might not be
+    # the best location to do it
+    args = __maybe_glob_paths(args)
 
     if config.check_only:
         if len(args) < 1:
