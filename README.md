@@ -201,7 +201,7 @@ Options
 `--no-move`: Doesn't actually move any files, but updates FoundryVTT databases as if it did, useful for repairing broken
 references
 
-`--check`: Doesn't move any file, looks for references to those files. Useful when you want to delete files. Doesn't use
+`--check`: Doesn't move any files, but looks for references to those files. Useful when you want to delete files. Doesn't use
 the `dst` argument, instead interprets all given paths as source paths
 
 `--force` Don't ask before overriding files
@@ -218,6 +218,10 @@ Renaming/Moving a file:
 Moving multiple files into an existing folder:
 
 `fvttmv.exe path\to\file1 path\to\file2 path\to\folder`
+
+Supports wildcards:
+
+`fvttmv.exe some\folder\*.png path\to\other\folder`
 
 Looking for references to one or more files:
 
@@ -238,7 +242,7 @@ Moving multiple files into an existing folder:
 
 `fvttmv path/to/file1 path/to/file2 path/to/folder`
 
-Supports wildcards on Ubuntu:
+Supports wildcards:
 
 `fvttmv some/folder/*.png path/to/other/folder`
 

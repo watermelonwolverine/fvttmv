@@ -22,6 +22,10 @@ Moving multiple files into an existing folder:\n\
 \n\
 `{0}.exe path\\to\\file1 path\\to\\file2 path\\to\\folder`\n\
 \n\
+Supports wildcards:\n\
+\n\
+`{0}.exe some\\folder\\*.png path\\to\\other\\folder`\n\
+\n\
 Looking for references to one or more files:\n\
 \n\
 `{0}.exe --check some\\folder\\some_file.png some\\folder\\some_other_file.png`\n\
@@ -42,7 +46,7 @@ Moving multiple files into an existing folder:\n\
 \n\
 `{0} path/to/file1 path/to/file2 path/to/folder`\n\
 \n\
-Supports wildcards on Ubuntu:\n\
+Supports wildcards:\n\
 \n\
 `{0} some/folder/*.png path/to/other/folder`\n\
 \n\

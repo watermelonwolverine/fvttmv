@@ -91,7 +91,7 @@ class PreMoveChecker:
             other_src_list = src_list.copy()
             other_src_list.remove(src)
             for other_src in other_src_list:
-                
+
                 # Can't move parent and child dir simultaneously
                 # TODO test: try to move parent and child or move file/dir twice
                 if PathTools.is_parent_dir(other_src, src):
