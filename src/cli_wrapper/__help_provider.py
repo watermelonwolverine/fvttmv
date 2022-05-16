@@ -32,8 +32,11 @@ def __maybe_generate_readme_md_file():
     yes = "yes"
     no = "no"
 
-    user_input = input("Do you want me to generate a new README.md? Enter {0} or {1} (default: {1}):\n"
-                       .format(yes, no))
+    try:
+        user_input = input("Do you want me to generate a new README.md? Enter {0} or {1} (default: {1}):\n"
+                        .format(yes, no))
+    except KeyboardInterrupt:
+        raise FvttmvException("Keyboard interrupt")
 
     if user_input not in [yes, no, ""]:
         print("Unknown option: {0}, assuming {1}".format(user_input, no))

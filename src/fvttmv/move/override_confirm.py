@@ -1,6 +1,7 @@
 import sys
-
 from io import TextIOWrapper
+
+from fvttmv.exceptions import FvttmvException
 
 
 class OverrideConfirm:
@@ -16,12 +17,18 @@ class OverrideConfirm:
     def confirm_override(self,
                          abs_path_to_src_file,
                          abs_path_to_dst_file) -> bool:
-        self.text_io_wrapper_out.write("You are trying to move {0} to {1}, but {1} does already exist. "
-                                       "Do you want to override the file at the target location? (y,n):\n".
+        self.text_io_wrapper_out.write("You are trying to move\n"
+                                       "{0}\n"
+                                       "to\n"
+                                       "{1}\n"
+                                       "which already exists. Do you want to override the file at the target location? (y,n):\n".
                                        format(abs_path_to_src_file,
                                               abs_path_to_dst_file))
 
-        input_str = self.text_io_wrapper_in.readline().strip()
+        try:
+            input_str = self.text_io_wrapper_in.readline().strip()
+        except KeyboardInterrupt:
+            raise FvttmvException("KeyboardInterrupt")
 
         while input_str.lower() != "n" and input_str.lower() != "y":
             self.text_io_wrapper_out.write("please enter y or n:\n")
