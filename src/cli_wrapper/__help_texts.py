@@ -10,6 +10,55 @@ Mimics the functionality of the `mv` command while also updating the references 
 \n\
 IMPORTANT: Shut down Foundry VTT before moving any files."
 
+usage_examples_windows = "\
+Examples: Windows\n\
+-----------------\n\
+\n\
+Renaming/Moving a file:\n\
+\n\
+`{0}.exe old\\path\\to\\file1 new\\path\\to\\file1`\n\
+\n\
+Moving multiple files into an existing folder:\n\
+\n\
+`{0}.exe path\\to\\file1 path\\to\\file2 path\\to\\folder`\n\
+\n\
+Looking for references to one or more files:\n\
+\n\
+`{0}.exe --check some\\folder\\some_file.png some\\folder\\some_other_file.png`\n\
+\n\
+Use single quotes when moving a file with a space:\n\
+\n\
+`{0}.exe 'some folder\\some file' 'some other folder\\some other file'`".format(app_name)
+
+usage_examples_ubuntu = "\
+Examples: Ubuntu\n\
+----------------\n\
+\n\
+Renaming/Moving a file:\n\
+\n\
+`{0} old/path/to/file1 new/path/to/file1`\n\
+\n\
+Moving multiple files into an existing folder:\n\
+\n\
+`{0} path/to/file1 path/to/file2 path/to/folder`\n\
+\n\
+Supports wildcards on Ubuntu:\n\
+\n\
+`{0} some/folder/*.png path/to/other/folder`\n\
+\n\
+Looking for references to one or more files:\n\
+\n\
+`{0} --check some/folder/some_file.png some/folder/some_other_file.png`\n\
+\n\
+Use single quotes when moving a file with a space:\n\
+\n\
+`{0} 'some folder/some file' 'some other folder/some other file'`".format(app_name)
+
+usage_examples_both = "\
+{0}\n\
+\n\
+{1}".format(usage_examples_windows, usage_examples_ubuntu)
+
 usage = "\
 Usage\n\
 =====\n\
@@ -49,46 +98,7 @@ the `dst` argument, instead interprets all given paths as source paths\n\
 \n\
 `--force` Don't ask before overriding files\n\
 \n\
-`--help` Display help and exit\n\
-\n\
-Examples\n\
---------\n\
-\n\
-Renaming/Moving a file:\n\
-\n\
-Ubuntu:\n\
-`{0} old/path/to/file1 new/path/to/file1`\n\
-\n\
-Windows:\n\
-`{0}.exe old\\path\\to\\file1 new\\path\\to\\file1`\n\
-\n\
-Moving multiple files into an existing folder:\n\
-\n\
-Ubuntu:\n\
-`{0} path/to/file1 path/to/file2 path/to/folder`\n\
-\n\
-Windows:\n\
-`{0}.exe path\\to\\file1 path\\to\\file2 path\\to\\folder`\n\
-\n\
-Supports wildcards on Ubuntu:\n\
-\n\
-`{0} some/folder/*.png path/to/other/folder`\n\
-\n\
-Looking for references to one or more files:\n\
-\n\
-Ubuntu:\n\
-`{0} --check some/folder/some_file.png some/folder/some_other_file.png`\n\
-\n\
-Windows:\n\
-`{0}.exe --check some\\folder\\some_file.png some\\folder\\some_other_file.png`\n\
-\n\
-Use single quotes when moving a file with a space:\n\
-\n\
-Ubuntu:\n\
-`{0} 'some folder/some file' 'some other folder/some other file'`\n\
-\n\
-Windows:\n\
-`{0}.exe 'some folder\\some file' 'some other folder\\some other file'`".format(app_name)
+`--help` Display help and exit".format(app_name)
 
 installation_windows = "\
 Installation: Windows\n\
@@ -261,7 +271,7 @@ Delete the files /etc/{0}.conf and /usr/bin/{0}".format(app_name,
                                                         python_version,
                                                         Keys.absolute_path_to_foundry_data_key)
 
-installation = "\
+installation_both = "\
 {0}\n\
 \n\
 {1}".format(installation_windows, installation_ubuntu)
@@ -278,6 +288,11 @@ Filesystems are quirky and subsequently so is this program.\n\
 Trailing `/` and `\\` are ignored. So `{0} some_file some_non_existing_path/` will be treated the same\n\
 as `{0} some_file some_non_existing_path`. It's generally good to avoid trailing `/` and `\\` as they only cause\n\
 issues, especially `\\`.\n\
+\n\
+If the programs encounters a .db file it can not read as UTF-8 it will fail.\n\
+An example for such a file would be `thumbs.db` which is a thumbnail cache in Windows XP.\n\
+Right now the only thing that can be done is to remove the file if it's not needed or temporarily rename it.\n\
+If this problem is encountered often, I'll may implement a blacklist feature, so let me know if this happens to you.\n\
 \n\
 Windows\n\
 -------\n\
@@ -304,7 +319,7 @@ In this case you need to tell the program where to look for those db files so it
 For this purpose add the following to your {0}.conf:\n\
 \n\
 ```\n\
-\"{1}\":[LIST_OF_ADDITIONAL_TARGETS]\n\
+\"{1}\":LIST_OF_ADDITIONAL_TARGETS\n\
 ```\n\
 \n\
 `LIST_OF_ADDITIONAL_TARGETS` has be a list of existing absolute paths to either files or folders.\n\
@@ -343,7 +358,9 @@ read_me = "\
 \n\
 %s\n\
 \n\
-%s" % (about, installation, usage, additional_configuration, issues)
+%s\n\
+\n\
+%s" % (about, installation_both, usage, usage_examples_both, additional_configuration, issues)
 
 read_me_for_ubuntu = "\
 %s\n\
@@ -354,7 +371,9 @@ read_me_for_ubuntu = "\
 \n\
 %s\n\
 \n\
-%s" % (about, installation_ubuntu, usage, additional_configuration, issues)
+%s\n\
+\n\
+%s" % (about, installation_ubuntu, usage, usage_examples_ubuntu, additional_configuration, issues)
 
 read_me_for_windows = "\
 %s\n\
@@ -365,4 +384,6 @@ read_me_for_windows = "\
 \n\
 %s\n\
 \n\
-%s" % (about, installation_windows, usage, additional_configuration, issues)
+%s\n\
+\n\
+%s" % (about, installation_windows, usage, usage_examples_windows, additional_configuration, issues)
