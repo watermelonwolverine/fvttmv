@@ -32,3 +32,4 @@
 =====
 - Added and integrated 'additional_targets_to_update' config parameter
 - Added help provision
+- Added glob support on Windows
