@@ -93,7 +93,7 @@ Options\n\
 `--no-move`: Doesn't actually move any files, but updates FoundryVTT databases as if it did, useful for repairing broken\n\
 references\n\
 \n\
-`--check`: Doesn't move any file, looks for references to those files. Useful when you want to delete files. Doesn't use\n\
+`--check`: Doesn't move any files, but looks for references to those files. Useful when you want to delete files. Doesn't use\n\
 the `dst` argument, instead interprets all given paths as source paths\n\
 \n\
 `--force` Don't ask before overriding files\n\
