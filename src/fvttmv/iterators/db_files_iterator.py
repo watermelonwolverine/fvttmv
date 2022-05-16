@@ -78,5 +78,7 @@ class DbFilesIterator:
 
         for directory in dirs_in_worlds_to_look_for_db_file:
             abs_path_to_dir = os.path.join(abs_path_to_world_dir, directory)
+            if not os.path.exists(abs_path_to_dir):
+                continue
             for db_file in self.__iterate_through_dir(abs_path_to_dir):
                 yield db_file
