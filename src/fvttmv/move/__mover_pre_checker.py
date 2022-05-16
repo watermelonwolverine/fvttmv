@@ -73,13 +73,16 @@ class PreMoveChecker:
         if not self.__path_tools.is_in_foundry_data(src):
             raise FvttmvException("Source paths have to be inside the configured foundry Data directory")
 
-        if not os.path.exists(src):
-            raise FvttmvException("Cannot move '{0}': No such file or directory"
-                                  .format(src))
+        if not self.__run_config.no_move:
+            # TODO test: move non-existing file
 
-        if not os.path.isfile(src) \
-                and not os.path.isdir(src):
-            raise FvttmvException("All source paths have to be files or a directories")
+            if not os.path.exists(src):
+                raise FvttmvException("Cannot move '{0}': No such file or directory"
+                                      .format(src))
+
+            if not os.path.isfile(src) \
+                    and not os.path.isdir(src):
+                raise FvttmvException("All source paths have to be files or a directories")
 
         if not self._is_moving_allowed(src):
             raise FvttmvException("Moving of '{0}' is not allowed"

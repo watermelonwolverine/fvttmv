@@ -39,33 +39,33 @@ class FileMover:
         PathTools.assert_path_format_is_ok(abs_path_to_dst)
 
         if os.path.isdir(abs_path_to_dst) and depth == 0:
-            self._move_file_to_directory(abs_path_to_src_file,
-                                         abs_path_to_dst)
+            self.__move_file_to_directory(abs_path_to_src_file,
+                                          abs_path_to_dst)
         else:
-            self._move_file_to_new_file(abs_path_to_src_file,
-                                        abs_path_to_dst)
+            self.__move_file_to_new_file(abs_path_to_src_file,
+                                         abs_path_to_dst)
 
-    def _move_file_to_directory(self,
-                                abs_path_to_src_file: str,
-                                abs_path_to_dst_dir: str) -> None:
+    def __move_file_to_directory(self,
+                                 abs_path_to_src_file: str,
+                                 abs_path_to_dst_dir: str) -> None:
 
         (_, file_name) = os.path.split(abs_path_to_src_file)
 
         new_dst = os.path.join(abs_path_to_dst_dir,
                                file_name)
 
-        self._move_file_to_new_file(abs_path_to_src_file,
-                                    new_dst)
+        self.__move_file_to_new_file(abs_path_to_src_file,
+                                     new_dst)
 
-    def _move_file_to_new_file(self,
-                               abs_path_to_src_file: str,
-                               abs_path_to_dst_file: str) -> None:
+    def __move_file_to_new_file(self,
+                                abs_path_to_src_file: str,
+                                abs_path_to_dst_file: str) -> None:
 
-        self._pre_check_requirements(abs_path_to_src_file,
-                                     abs_path_to_dst_file)
+        self.__pre_check_requirements(abs_path_to_src_file,
+                                      abs_path_to_dst_file)
 
-        file_was_moved = self._maybe_move_file(abs_path_to_src_file,
-                                               abs_path_to_dst_file)
+        file_was_moved = self.__maybe_move_file(abs_path_to_src_file,
+                                                abs_path_to_dst_file)
 
         update_references = file_was_moved
 
@@ -74,12 +74,12 @@ class FileMover:
                                                                                         abs_path_to_dst_file)
 
         if update_references:
-            self._update_dbs_after_moving(abs_path_to_src_file,
-                                          abs_path_to_dst_file)
+            self.__update_dbs_after_moving(abs_path_to_src_file,
+                                           abs_path_to_dst_file)
 
-    def _pre_check_requirements(self,
-                                abs_path_to_src_file: str,
-                                abs_path_to_dst_file: str) -> None:
+    def __pre_check_requirements(self,
+                                 abs_path_to_src_file: str,
+                                 abs_path_to_dst_file: str) -> None:
 
         if self.config.no_move:
             return
@@ -101,9 +101,9 @@ class FileMover:
             raise FvttmvException("Destination directory '{0}' does not exist"
                                   .format(abs_path_to_dst_file))
 
-    def _maybe_move_file(self,
-                         abs_path_to_src_file: str,
-                         abs_path_to_dst_file: str) -> bool:
+    def __maybe_move_file(self,
+                          abs_path_to_src_file: str,
+                          abs_path_to_dst_file: str) -> bool:
         if self.config.no_move:
             return True
 
@@ -127,9 +127,9 @@ class FileMover:
                           abs_path_to_src_file)
             return False
 
-    def _update_dbs_after_moving(self,
-                                 abs_path_to_src_file: str,
-                                 abs_path_to_dst_file: str) -> None:
+    def __update_dbs_after_moving(self,
+                                  abs_path_to_src_file: str,
+                                  abs_path_to_dst_file: str) -> None:
 
         old_reference = self.path_tools.create_reference_from_absolute_path(abs_path_to_src_file)
 

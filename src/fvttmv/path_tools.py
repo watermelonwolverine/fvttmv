@@ -2,7 +2,7 @@ import glob
 import os.path
 import sys
 
-from fvttmv.exceptions import FvttmvException, FvttmvInternalException
+from fvttmv.exceptions import FvttmvInternalException
 from fvttmv.reference_tools import ReferenceTools
 
 
@@ -15,7 +15,7 @@ class PathTools:
         PathTools.assert_path_format_is_ok(absolute_path_to_foundry_data)
 
         if not os.path.isdir(absolute_path_to_foundry_data):
-            raise FvttmvException("Configured Foundry VTT Data folder does not exist.")
+            raise FvttmvInternalException("Configured Foundry VTT Data folder does not exist.")
 
         self.abs_path_to_foundry_data = absolute_path_to_foundry_data
 
@@ -34,7 +34,7 @@ class PathTools:
         PathTools.assert_path_format_is_ok(absolute_path)
 
         if not self.is_in_foundry_data(absolute_path):
-            raise FvttmvException()
+            raise FvttmvInternalException()
 
         result = os.path.normpath(absolute_path)
 
@@ -125,7 +125,7 @@ class PathTools:
     def get_correctly_cased_path(abs_path):
 
         if not os.path.exists(abs_path):
-            raise FvttmvException("Cannot correctly case path that does not exist: %s" % abs_path)
+            raise FvttmvInternalException("Cannot correctly case path that does not exist: %s" % abs_path)
 
         PathTools.assert_path_format_is_ok(abs_path)
 
