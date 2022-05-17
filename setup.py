@@ -25,6 +25,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src", include=[r'fvttmv.*']),
+    packages=setuptools.find_packages(where="src", exclude=['cli_wrapper']),
     python_requires=">=3.8",
 )
