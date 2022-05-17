@@ -75,7 +75,8 @@ class ProgramConfigImplTest(TestCase):
 
         config_dict = {Keys.absolute_path_to_foundry_data_key: AbsPaths.Data}
 
-        config = ConfigFileReader.parse_dict(config_dict)
+        # noinspection PyUnresolvedReferences
+        config = ConfigFileReader._ConfigFileReader__parse_dict(config_dict)
 
         self.assertEqual(config.get_absolute_path_to_foundry_data(),
                          AbsPaths.Data)
@@ -90,7 +91,8 @@ class ProgramConfigImplTest(TestCase):
         config_dict = {Keys.absolute_path_to_foundry_data_key: AbsPaths.Data,
                        Keys.additional_targets_to_update: [AbsPaths.shared_db]}
 
-        config = ConfigFileReader.parse_dict(config_dict)
+        # noinspection PyUnresolvedReferences
+        config = ConfigFileReader._ConfigFileReader__parse_dict(config_dict)
 
         self.assertEqual(config.get_absolute_path_to_foundry_data(),
                          AbsPaths.Data)

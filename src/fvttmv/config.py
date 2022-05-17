@@ -65,10 +65,10 @@ class ConfigFileReader:
         except BaseException as ex:
             raise FvttmvException("Exception while reading config file: " + str(ex))
 
-        return ConfigFileReader.parse_dict(config_dict)
+        return ConfigFileReader.__parse_dict(config_dict)
 
     @staticmethod
-    def parse_dict(config_dict: dict) -> ProgramConfig:
+    def __parse_dict(config_dict: dict) -> ProgramConfig:
 
         keys_to_process: List[str] = list(config_dict.keys())
 
@@ -172,13 +172,13 @@ class ProgramConfigChecker:
             raise FvttmvException(error_msg)
 
         for additional_target in additional_targets_to_update:
-            ProgramConfigChecker.assert_additional_target_is_ok(
+            ProgramConfigChecker.__assert_additional_target_is_ok(
                 abs_path_to_foundry_data,
                 additional_target)
 
     @staticmethod
-    def assert_additional_target_is_ok(abs_path_to_foundry_data: str,
-                                       abs_path_to_target: str) -> None:
+    def __assert_additional_target_is_ok(abs_path_to_foundry_data: str,
+                                         abs_path_to_target: str) -> None:
 
         if type(abs_path_to_target) is not str:
             error_msg = ProgramConfigChecker.error_message.format(

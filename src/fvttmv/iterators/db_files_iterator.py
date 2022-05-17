@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+from fvttmv.config import ProgramConfigChecker
 from fvttmv.path_tools import PathTools
 from fvttmv.wolds_finder import WorldsFinder
 
@@ -15,6 +16,11 @@ class DbFilesIterator:
     def iterate_through_all(self,
                             abs_path_to_foundry_data: str,
                             abs_paths_to_additional_targets: List[str]):
+
+        # un-taint stuff
+        ProgramConfigChecker.assert_path_to_foundry_data_is_ok(abs_path_to_foundry_data)
+        ProgramConfigChecker.assert_additional_targets_to_update_are_ok(abs_path_to_foundry_data,
+                                                                        abs_paths_to_additional_targets)
 
         # Check before iterating -> Don't fail in the middle
         for abs_path in abs_paths_to_additional_targets + [abs_path_to_foundry_data]:
