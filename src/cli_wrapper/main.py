@@ -6,12 +6,13 @@ import traceback
 from typing import List
 
 import fvttmv
-from cli_wrapper.__args import version_option, verbose_info_option, verbose_debug_option, help_option, config_option, \
+from cli_wrapper.__args import version_option, verbose_info_option, verbose_debug_option, help_option, setup_option, \
     check_args, process_and_remove_config_args
-from cli_wrapper.__configurator import configure_program
-from cli_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
+from cli_wrapper.__constants import app_name, path_to_config_file_linux, issues_url, win32, linux, \
+    path_to_config_file_windows
 from cli_wrapper.__help_provider import tell_user_how_to_use_the_program
 from cli_wrapper.__help_texts import help_text_windows, help_text_ubuntu
+from cli_wrapper.__setup import setup
 from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
@@ -19,32 +20,17 @@ from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 
-win32 = "win32"
-linux = "linux"
 supported_platforms = [win32, linux]
 
 bug_report_message = "Please file a bug report on %s" % issues_url
 unsupported_os_error_msg = "Unsupported OS: {0}"
 
 
-def __get_path_to_config_file_windows():
-    dir_of_script: str
-    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        # running in a PyInstaller bundle
-        # TODO fix: this doesn't work in cmd only in powershell
-        dir_of_script = os.path.dirname(sys.argv[0])
-    else:
-        # running in normal python environment
-        dir_of_script = os.path.abspath(os.path.dirname(__file__))
-
-    return os.path.join(dir_of_script, config_file_name)
-
-
 def __get_path_to_config_file():
     if sys.platform == linux:
-        return path_to_config_file_linux
+        return os.path.abspath(path_to_config_file_linux)
     elif sys.platform == win32:
-        return __get_path_to_config_file_windows()
+        return os.path.expandvars(path_to_config_file_windows)
     else:
         raise FvttmvException(unsupported_os_error_msg.format(sys.platform))
 
@@ -190,8 +176,8 @@ def __do_run() -> None:
     logging.debug("Got arguments %s",
                   sys.argv)
 
-    if config_option in args:
-        configure_program()
+    if setup_option in args:
+        setup()
         return
 
     if help_option in args:
@@ -202,7 +188,10 @@ def __do_run() -> None:
         print("{0} version: {1}".format(app_name, fvttmv.__version__))
         return
 
-    config = RunConfig(__read_config_file())
+    if os.path.exists(__get_path_to_config_file()):
+        config = RunConfig(__read_config_file())
+    else:
+        raise FvttmvException("Missing config file. Use the --config option to create one.")
 
     process_and_remove_config_args(config,
                                    args)
@@ -251,7 +240,3 @@ def main() -> None:
         logging.error(formatted)
         print("An unexpected error occurred: " + str(formatted))
         print(bug_report_message)
-
-
-if __name__ == "__main__":
-    main()

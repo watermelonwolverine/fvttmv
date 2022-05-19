@@ -10,7 +10,7 @@ no_move_option = "--no-move"
 check_option = "--check"
 force_option = "--force"
 help_option = "--help"
-config_option = "--config"
+setup_option = "--config"
 
 allowed_args = [
     version_option,
@@ -20,7 +20,7 @@ allowed_args = [
     check_option,
     force_option,
     help_option,
-    config_option
+    setup_option
 ]
 
 
