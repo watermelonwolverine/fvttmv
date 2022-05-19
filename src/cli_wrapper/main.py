@@ -6,6 +6,9 @@ import traceback
 from typing import List
 
 import fvttmv
+from cli_wrapper.__args import version_option, verbose_info_option, verbose_debug_option, help_option, config_option, \
+    check_args, process_and_remove_config_args
+from cli_wrapper.__configurator import configure_program
 from cli_wrapper.__constants import app_name, config_file_name, path_to_config_file_linux, issues_url
 from cli_wrapper.__help_provider import tell_user_how_to_use_the_program
 from cli_wrapper.__help_texts import help_text_windows, help_text_ubuntu
@@ -15,23 +18,6 @@ from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
-
-version_option = "--version"
-verbose_info_option = "--verbose-info"
-verbose_debug_option = "--verbose-debug"
-no_move_option = "--no-move"
-check_option = "--check"
-force_option = "--force"
-help_option = "--help"
-allowed_args = [
-    version_option,
-    verbose_info_option,
-    verbose_debug_option,
-    no_move_option,
-    check_option,
-    force_option,
-    help_option
-]
 
 win32 = "win32"
 linux = "linux"
@@ -120,37 +106,6 @@ def __perform_search_with(
     searcher.search(abs_search_list)
 
 
-def __check_for_unknown_args(args: List[str]) -> None:
-    for arg in args:
-        if arg.startswith("-"):
-            if arg not in allowed_args:
-                raise FvttmvException("Unknown argument: {0}".format(arg))
-
-
-def __check_for_illegal_arg_combos(args: List[str]) -> None:
-    combination_error_msg = "Combining '{0}' and '{1}' is not allowed"
-
-    if check_option in args and no_move_option in args:
-        msg = combination_error_msg.format(no_move_option, check_option)
-        raise FvttmvException(msg)
-
-    if verbose_debug_option in args and verbose_info_option in args:
-        msg = combination_error_msg.format(verbose_info_option, verbose_debug_option)
-        raise FvttmvException(msg)
-
-
-def __check_for_duplicate_args(args: List[str]) -> None:
-    for allowed_arg in allowed_args:
-        if args.count(allowed_arg) > 1:
-            raise FvttmvException("Only one occurrence per option is allowed")
-
-
-def __check_args(args: List[str]) -> None:
-    __check_for_unknown_args(args)
-    __check_for_illegal_arg_combos(args)
-    __check_for_duplicate_args(args)
-
-
 def __add_logging_stream_handler(level: int):
     root = logging.getLogger()
     root.setLevel(level)
@@ -178,31 +133,6 @@ def configure_logging(
     else:
         logging.disable(logging.CRITICAL)
         logging.disable(logging.ERROR)
-
-
-def __read_bool_arg(arg: str,
-                    args: List[str],
-                    default: bool = False):
-    if arg in args:
-        args.remove(arg)
-        return True
-    else:
-        return default
-
-
-def __process_and_remove_config_args(
-        config: RunConfig,
-        args: List[str]) -> None:
-    """
-    Processes all args which affect the run config
-    """
-
-    config.no_move = __read_bool_arg(no_move_option,
-                                     args)
-    config.check_only = __read_bool_arg(check_option,
-                                        args)
-    config.force = __read_bool_arg(force_option,
-                                   args)
 
 
 def __check_platform():
@@ -253,12 +183,16 @@ def __do_run() -> None:
         tell_user_how_to_use_the_program()
         return
 
-    __check_args(args)
+    check_args(args)
 
     configure_logging(args)
 
     logging.debug("Got arguments %s",
                   sys.argv)
+
+    if config_option in args:
+        configure_program()
+        return
 
     if help_option in args:
         __print_help_text()
@@ -270,8 +204,8 @@ def __do_run() -> None:
 
     config = RunConfig(__read_config_file())
 
-    __process_and_remove_config_args(config,
-                                     args)
+    process_and_remove_config_args(config,
+                                   args)
 
     # globbing arguments here to achieve consistent behavior across Windows and Ubuntu even though it might not be
     # the best location to do it
