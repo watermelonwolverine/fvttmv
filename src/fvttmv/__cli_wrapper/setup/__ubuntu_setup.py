@@ -1,10 +1,11 @@
 import json
 import os
 
-from cli_wrapper.__constants import path_to_config_file_linux
-from cli_wrapper.__setup import ask_yes_or_no_question
+from fvttmv.__cli_wrapper.__constants import path_to_config_file_linux
 from fvttmv.config import Keys
 from fvttmv.path_tools import PathTools
+
+from .__common import ask_yes_or_no_question
 
 
 def ubuntu_setup():

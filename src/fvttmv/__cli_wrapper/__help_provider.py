@@ -1,7 +1,7 @@
 import os
 import sys
 
-from cli_wrapper.__help_texts import read_me_for_ubuntu, read_me_for_windows
+from .__help_texts import read_me_for_ubuntu, read_me_for_windows
 from fvttmv.exceptions import FvttmvException
 
 
@@ -34,7 +34,7 @@ def __maybe_generate_readme_md_file():
 
     try:
         user_input = input("Do you want me to generate a new README.md? Enter {0} or {1} (default: {1}):\n"
-                        .format(yes, no))
+                           .format(yes, no))
     except KeyboardInterrupt:
         raise FvttmvException("Keyboard interrupt")
 

@@ -5,20 +5,20 @@ import sys
 import traceback
 from typing import List
 
-import fvttmv
-from cli_wrapper.__args import version_option, verbose_info_option, verbose_debug_option, help_option, setup_option, \
-    check_args, process_and_remove_config_args
-from cli_wrapper.__constants import app_name, path_to_config_file_linux, issues_url, win32, linux, \
-    path_to_config_file_windows
-from cli_wrapper.__help_provider import tell_user_how_to_use_the_program
-from cli_wrapper.__help_texts import help_text_windows, help_text_ubuntu
-from cli_wrapper.__setup import setup
+from fvttmv import __version__
 from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
 from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
+from .__args import version_option, verbose_info_option, verbose_debug_option, help_option, \
+    setup_option, check_args, process_and_remove_config_args
+from .__constants import app_name, path_to_config_file_linux, issues_url, win32, linux, \
+    path_to_config_file_windows
+from .__help_provider import tell_user_how_to_use_the_program
+from .__help_texts import help_text_windows, help_text_ubuntu
+from .setup.setup import setup
 
 supported_platforms = [win32, linux]
 
@@ -48,7 +48,7 @@ def __perform_move_with(
         dst: str,
         config: RunConfig) -> None:
     logging.debug("Running with working_dir='%s', src_list='%s', dst='%s', config='%s'",
-                  os.path.abspath("."),
+                  os.path.abspath(""),
                   src_list,
                   dst,
                   config)
@@ -185,7 +185,7 @@ def __do_run() -> None:
         return
 
     if version_option in args:
-        print("{0} version: {1}".format(app_name, fvttmv.__version__))
+        print("{0} version: {1}".format(app_name, __version__))
         return
 
     if os.path.exists(__get_path_to_config_file()):

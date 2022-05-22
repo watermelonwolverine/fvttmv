@@ -1,5 +1,5 @@
-from cli_wrapper.__constants import app_name
-from cli_wrapper.__versions import pyinstaller_version, python_version
+from .__constants import app_name
+from .__versions import pyinstaller_version, python_version
 from fvttmv.config import Keys
 
 about = "\
