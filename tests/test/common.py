@@ -1,8 +1,9 @@
 import os
 import shutil
-import unittest
 import urllib.parse
 from pathlib import Path
+
+from pyfakefs import fake_filesystem_unittest
 
 from fvttmv import utf_8
 
@@ -10,6 +11,8 @@ ansi = "ANSI"
 
 path_to_test_module = Path(__file__).parent.absolute()
 path_to_tests_dir = path_to_test_module.parent.absolute()
+
+use_fake_fs = False
 
 
 def ref(*args):
@@ -229,8 +232,6 @@ class Setup:
 
     @staticmethod
     def setup_working_environment():
-        os.chdir(str(path_to_tests_dir))
-
         if os.path.exists(C.foundrydata):
             shutil.rmtree(C.foundrydata)
 
@@ -317,15 +318,12 @@ class Setup:
             fout.write("")
 
 
-# For testing in a real environment
-class TestCase(unittest.TestCase):
+class TestCase(fake_filesystem_unittest.TestCase):
 
     def setUp(self) -> None:
-        Setup.setup_working_environment()
+        os.chdir(str(path_to_tests_dir))
 
-# For testing in a virtual environment
-# class TestCase(fake_filesystem_unittest.TestCase):
-#
-#     def setUp(self) -> None:
-#         self.setUpPyfakefs()
-#         Setup.setup_working_environment()
+        if use_fake_fs:
+            self.setUpPyfakefs()
+
+        Setup.setup_working_environment()
