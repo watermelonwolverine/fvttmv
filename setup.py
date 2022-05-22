@@ -1,13 +1,10 @@
-import sys
+import os
+from glob import glob
 
 import setuptools
 
-sys.path.append("src")
-
-# noinspection PyPep8
-from cli_wrapper.__constants import app_name, author, url, issues_url
-# noinspection PyPep8
-from fvttmv import __version__
+from src.fvttmv import __version__
+from src.fvttmv.__cli_wrapper.__constants import app_name, author, url, issues_url
 
 setuptools.setup(
     name=app_name,
@@ -25,9 +22,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
-    packages=setuptools.find_packages(where="src", exclude=['cli_wrapper']),
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.8",
+    py_modules=[os.path.splitext(os.path.basename(path))[0] for path in glob('src/*.py')],
     entry_points={
-        'console_scripts': [app_name, 'fvttmv.main:main'],
+        'console_scripts': [f'{app_name} = fvttmv.__cli_wrapper.cli:main'],
     }
 )
