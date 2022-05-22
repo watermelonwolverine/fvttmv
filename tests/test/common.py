@@ -2,10 +2,14 @@ import os
 import shutil
 import unittest
 import urllib.parse
+from pathlib import Path
 
 from fvttmv import utf_8
 
 ansi = "ANSI"
+
+path_to_test_module = Path(__file__).parent.absolute()
+path_to_tests_dir = path_to_test_module.parent.absolute()
 
 
 def ref(*args):
@@ -118,7 +122,8 @@ class RelPaths:
 
 
 class AbsPaths:
-    foundrydata = os.path.abspath(C.foundrydata)
+    foundrydata = os.path.join(str(path_to_tests_dir),
+                               C.foundrydata)
 
     #
     # foundrydata contents
@@ -224,6 +229,8 @@ class Setup:
 
     @staticmethod
     def setup_working_environment():
+        os.chdir(str(path_to_tests_dir))
+
         if os.path.exists(C.foundrydata):
             shutil.rmtree(C.foundrydata)
 

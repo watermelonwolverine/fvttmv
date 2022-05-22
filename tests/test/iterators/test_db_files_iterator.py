@@ -16,6 +16,7 @@ class DbFilesIteratorTest(TestCase):
 
         result = []
 
+        # noinspection PyUnresolvedReferences
         for db_file in DbFilesIterator()._DbFilesIterator__iterate_through_world_dir(AbsPaths.world1):
             result.append(db_file)
 
@@ -50,6 +51,7 @@ class DbFilesIteratorTest(TestCase):
                                                 "does_not_exist")
 
         try:
+            # noinspection PyUnresolvedReferences
             for _ in DbFilesIterator()._DbFilesIterator__iterate_through_world_dir(path_that_does_not_exist):
                 self.fail()
         except FvttmvException:
