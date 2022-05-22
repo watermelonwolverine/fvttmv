@@ -1,7 +1,13 @@
 import os
+import sys
 from glob import glob
 
 import setuptools
+
+if sys.platform == "win32":
+    # for some reason on Windows this is needed
+    path_to_project_dir = os.path.split(os.path.realpath(__file__))[0]
+    sys.path.append(path_to_project_dir)
 
 from src.fvttmv import __version__
 from src.fvttmv.__cli_wrapper.__constants import app_name, author, url, issues_url
