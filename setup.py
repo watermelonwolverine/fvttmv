@@ -33,5 +33,6 @@ setuptools.setup(
     py_modules=[os.path.splitext(os.path.basename(path))[0] for path in glob('src/*.py')],
     entry_points={
         'console_scripts': [f'{app_name} = fvttmv.__cli_wrapper.cli:main'],
-    }
+    },
+    requires=["appdirs", "toml"]
 )

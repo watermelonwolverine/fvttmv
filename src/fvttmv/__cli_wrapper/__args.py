@@ -12,6 +12,8 @@ force_option = "--force"
 help_option = "--help"
 setup_option = "--config"
 
+data_dir_option = "--data-dir"
+
 allowed_args = [
     version_option,
     verbose_info_option,

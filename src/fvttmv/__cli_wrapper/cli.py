@@ -6,7 +6,7 @@ import traceback
 from typing import List
 
 from fvttmv import __version__
-from fvttmv.config import RunConfig, ProgramConfig, ConfigFileReader
+from fvttmv.config import RunConfig
 from fvttmv.exceptions import FvttmvException, FvttmvInternalException
 from fvttmv.move.mover import Mover
 from fvttmv.move.override_confirm import OverrideConfirm
@@ -14,33 +14,16 @@ from fvttmv.search.references_searcher import ReferencesSearcher
 from fvttmv.update.references_updater import ReferencesUpdater
 from .__args import version_option, verbose_info_option, verbose_debug_option, help_option, \
     setup_option, check_args, process_and_remove_config_args
-from .__constants import app_name, path_to_config_file_linux, issues_url, win32, linux, \
-    path_to_config_file_windows
+from .__constants import app_name, issues_url, win32, linux
 from .__help_provider import tell_user_how_to_use_the_program
 from .__help_texts import help_text_windows, help_text_ubuntu
+from .config.config_provider import get_config
 from .setup.setup import setup
 
 supported_platforms = [win32, linux]
 
 bug_report_message = "Please file a bug report on %s" % issues_url
 unsupported_os_error_msg = "Unsupported OS: {0}"
-
-
-def __get_path_to_config_file():
-    if sys.platform == linux:
-        return os.path.abspath(path_to_config_file_linux)
-    elif sys.platform == win32:
-        return os.path.expandvars(path_to_config_file_windows)
-    else:
-        raise FvttmvException(unsupported_os_error_msg.format(sys.platform))
-
-
-def __read_config_file() -> ProgramConfig:
-    path_to_config_file = __get_path_to_config_file()
-
-    program_config = ConfigFileReader.read_config_file(path_to_config_file)
-
-    return program_config
 
 
 def __perform_move_with(
@@ -188,10 +171,7 @@ def __do_run() -> None:
         print("{0} version: {1}".format(app_name, __version__))
         return
 
-    if os.path.exists(__get_path_to_config_file()):
-        config = RunConfig(__read_config_file())
-    else:
-        raise FvttmvException("Missing config file. Use the --config option to create one.")
+    config = get_config(args)
 
     process_and_remove_config_args(config,
                                    args)
